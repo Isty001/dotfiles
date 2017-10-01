@@ -102,7 +102,7 @@ let g:vimfiler_ignore_pattern = []
 nnoremap <Leader>d :<C-u>VimFilerExplorer -split -simple -parent -winwidth=35 -toggle -no-quit<CR>
 nnoremap <Leader>jf :<C-u>VimFilerExplorer -split -simple -parent -winwidth=35 -no-quit -find<CR>
 
-nmap <C-n> :VimFilerExplorer -find<CR>
+nmap <C-g> :VimFilerExplorer -find<CR>
 
 autocmd FileType vimfiler nunmap <buffer> x
 autocmd FileType vimfiler nmap <buffer> x <Plug>(vimfiler_toggle_mark_current_line)
