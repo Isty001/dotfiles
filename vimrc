@@ -73,6 +73,22 @@ set directory^=$HOME/.vim/tmp//
 set undofile
 set undodir=$HOME/.vim/tmp//
 
+"========= HightLight selected word ==
+set updatetime=10
+
+function! HighlightWordUnderCursor()
+    if getline(".")[col(".")-1] !~# '[[:punct:][:blank:]]'
+        exec 'match' 'Search' '/\V\<'.expand('<cword>').'\>/'
+    else
+        match none
+    endif
+endfunction
+
+autocmd! CursorHold,CursorHoldI * call HighlightWordUnderCursor()
+
+"========= Search for selected text ==
+vnoremap f y/\V<C-R>"<CR>
+
 "========== Lightline ======
 let g:lightline = {
       \ 'colorscheme': 'wombat',
@@ -167,5 +183,7 @@ nnoremap <C-Left> <C-w>h
 nnoremap <C-Down> <C-w>j
 nnoremap <C-Up> <C-w>k
 nnoremap <C-Right> <C-w>l
+
+nnoremap <C-c> :BD<CR>
 
 let g:move_key_modifier = 'C'
