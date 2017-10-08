@@ -19,27 +19,35 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
+
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'matze/vim-move'
 
 Plugin 'mileszs/ack.vim'
 
-"NERDTree
-"Plugin 'scrooloose/nerdtree'
-"Plugin 'Xuyuanp/nerdtree-git-plugin'
-
 "VimFiler
 Plugin 'Shougo/unite.vim'
 Plugin 'Shougo/vimfiler.vim'
 
-" UI
+" Theme 
 Plugin 'dracula/vim'
+Plugin 'josuegaleas/jay'
+Plugin 'beigebrucewayne/Turtles'
+Plugin 'NLKNguyen/papercolor-theme'
+
+
+" UI
 Plugin 'qpkorr/vim-bufkill'
 Plugin 'fholgado/minibufexpl.vim'
 Plugin 'majutsushi/tagbar'
 Plugin 'itchyny/lightline.vim'
 
+"Synthax highlight
+Plugin 'sheerun/vim-polyglot'
+
+" Code
 Plugin 'Raimondi/delimitMate'
+Plugin 'tpope/vim-surround'
 
 " Git
 Plugin 'tpope/vim-fugitive'
@@ -47,17 +55,30 @@ Plugin 'airblade/vim-gitgutter'
 
 Plugin 'vim-scripts/vim-auto-save'
 
-call vundle#end()            " required
+" Build & Test
+Plugin 'janko-m/vim-test'
+Plugin 'tpope/vim-dispatch'
+Plugin 'reinh/vim-makegreen'
+Plugin 'benmills/vimux'
+
+
+call vundle#end()
 filetype plugin indent on
 
+"========== ColorScheme ====
+syntax enable
+set background=dark
+colorscheme jay
 
 "=========== BASIC ==========
-syntax on
+silent! so .vimlocal
+
+set encoding=utf8
+set t_Co=256
 
 set list
 set listchars=tab:>-,trail:.,extends:>,precedes:<
 
-color dracula
 set backspace=indent,eol,start
 
 set tabstop=4
@@ -65,9 +86,10 @@ set shiftwidth=4
 set softtabstop=4
 set expandtab
 set nu
+set nowrap
 set mouse=a
 
-"let g:auto_save = 1
+let g:auto_save = 1
 set directory^=$HOME/.vim/tmp//
 
 set undofile
@@ -86,12 +108,27 @@ endfunction
 
 autocmd! CursorHold,CursorHoldI * call HighlightWordUnderCursor()
 
-"========= Search for selected text ==
-vnoremap f y/\V<C-R>"<CR>
+"========== Templates ======
+
+" Go to next placeholder
+imap <buffer> ;; <C-O>/<CR><C-O>c3l
+nmap <buffer> ;; /%%%<CR>c3l
+
+
+" PHP
+imap <buffer> ;pubf <C-O>mzpublic function %%%(%%%)<CR>{<CR>%%%<CR>}<C-O>'z;;
+imap <buffer> ;prof <C-O>mzprotected function %%%(%%%)<CR>{<CR>%%%<CR>}<C-O>'z;;
+imap <buffer> ;prif <C-O>mzprivate function %%%(%%%)<CR>{<CR>%%%<CR>}<C-O>'z;;
+
+imap <buffer> ;pubsf <C-O>mzpublic static function %%%(%%%)<CR>{<CR>%%%<CR>}<C-O>'z;;
+imap <buffer> ;prosf <C-O>mzprotected static function %%%(%%%)<CR>{<CR>%%%<CR>}<C-O>'z;;
+imap <buffer> ;prisf <C-O>mzprivate static function %%%(%%%)<CR>{<CR>%%%<CR>}<C-O>'z;;
+
+imap <buffer> ;vd <C-O>mzvar_dump(%%%);<C-O>'z;;
 
 "========== Lightline ======
 let g:lightline = {
-      \ 'colorscheme': 'wombat',
+      \ 'colorscheme': 'jay',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
@@ -102,11 +139,15 @@ let g:lightline = {
       \ }
 
 "========== Tagbar ==========
-autocmd VimEnter * TagbarOpen
+if !&diff 
+    autocmd VimEnter * TagbarOpen
+endif
 
 "========== VimFiler =======
-autocmd VimEnter * VimFilerExplorer
-autocmd VimEnter * wincmd p
+if !&diff
+    autocmd VimEnter * VimFilerExplorer
+    autocmd VimEnter * wincmd p
+endif
 
 set nocompatible
 let mapleader=" "
@@ -131,42 +172,16 @@ autocmd FileType vimfiler nmap <silent><buffer><expr> <CR> vimfiler#smart_cursor
 \ "\<Plug>(vimfiler_expand_tree)",
 \ "\<Plug>(vimfiler_edit_file)")
 
-
-"========== NERDTree ========
-" Jump to the main window.
-"autocmd vimenter * NERDTree
-"autocmd StdinReadPre * let s:std_in=1
-"autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-
-"let NERDTreeShowHidden=1
-
-" Open current file in NERDTree
-" Check if NERDTree is open or active
-"function! IsNERDTreeOpen()
-""  return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
-"endfunction
-
-" Call NERDTreeFind iff NERDTree is active, current window contains a modifiable
-" file, and we're not in vimdiff
-"function! SyncTree()
-""  if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
-""    NERDTreeFind
-""    wincmd p
-""  endif
-"endfunction
-
-"nmap <C-n> :NERDTreeFind<CR>
-
-" Highlight currently open buffer in NERDTree
-"autocmd VimEnter * call SyncTree()
-"autocmd BufEnter * call SyncTree()
+"========== Vim-Test ========
+let test#strategy = "dispatch"
 
 "========== Search ==========
 set wildmenu 
-set wildmode=list:full
+set wildmode=longest:full,full
 
 "========== YCM ============
 set completeopt-=preview
+let g:ycm_autoclose_preview_window_after_insertion = 1
 
 "========== Mini Buff Expl =====
 let g:miniBufExplMapWindowNavVim = 1 
