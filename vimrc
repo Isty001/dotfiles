@@ -30,11 +30,7 @@ Plugin 'Shougo/unite.vim'
 Plugin 'Shougo/vimfiler.vim'
 
 " Theme 
-Plugin 'dracula/vim'
 Plugin 'josuegaleas/jay'
-Plugin 'beigebrucewayne/Turtles'
-Plugin 'NLKNguyen/papercolor-theme'
-
 
 " UI
 Plugin 'qpkorr/vim-bufkill'
@@ -42,12 +38,18 @@ Plugin 'fholgado/minibufexpl.vim'
 Plugin 'majutsushi/tagbar'
 Plugin 'itchyny/lightline.vim'
 
+"History
+Plugin 'yegappan/mru'
+Plugin 'mbbill/undotree'
+
 "Synthax highlight
 Plugin 'sheerun/vim-polyglot'
 
 " Code
 Plugin 'Raimondi/delimitMate'
 Plugin 'tpope/vim-surround'
+Plugin 'editorconfig/editorconfig-vim'
+Plugin 'vim-scripts/dbext.vim'
 
 " Git
 Plugin 'tpope/vim-fugitive'
@@ -66,15 +68,20 @@ call vundle#end()
 filetype plugin indent on
 
 "========== ColorScheme ====
-syntax enable
+syntax on
+
 set background=dark
 colorscheme jay
+
 
 "=========== BASIC ==========
 silent! so .vimlocal
 
 set encoding=utf8
+
 set t_Co=256
+
+set hlsearch
 
 set list
 set listchars=tab:>-,trail:.,extends:>,precedes:<
@@ -89,7 +96,12 @@ set nu
 set nowrap
 set mouse=a
 
+" Use the system clipboard
+set clipboard=unnamedplus
+
 let g:auto_save = 1
+
+set noswapfile
 set directory^=$HOME/.vim/tmp//
 
 set undofile
@@ -108,14 +120,33 @@ endfunction
 
 autocmd! CursorHold,CursorHoldI * call HighlightWordUnderCursor()
 
+"========= ACK/AG ==============
+let g:ackprg = 'ag --skip-vcs-ignores --path-to-ignore=./.vim-ignore'
+
+"========== TMUX screen-256 fix ===
+if exists('$TMUX')
+    set term=screen-256color
+set t_8f=^[[38;2;%lu;%lu;%lum
+endif
+
+if &term =~ '^screen'
+    " tmux will send xterm-style keys when its xterm-keys option is on
+    execute "set <xUp>=\e[1;*A"
+    execute "set <xDown>=\e[1;*B"
+    execute "set <xRight>=\e[1;*C"
+    execute "set <xLeft>=\e[1;*D"
+endif
+
 "========== Templates ======
 
 " Go to next placeholder
-imap <buffer> ;; <C-O>/<CR><C-O>c3l
+imap <buffer> ;; <C-O>/%%%<CR><C-O>c3l
 nmap <buffer> ;; /%%%<CR>c3l
 
-
 " PHP
+
+imap <buffer> ;fo <C-O>mzfor( %%%; %%%; %%%)<CR>{ // %%%<CR>%%%<CR>}<CR><C-O>'z;;
+
 imap <buffer> ;pubf <C-O>mzpublic function %%%(%%%)<CR>{<CR>%%%<CR>}<C-O>'z;;
 imap <buffer> ;prof <C-O>mzprotected function %%%(%%%)<CR>{<CR>%%%<CR>}<C-O>'z;;
 imap <buffer> ;prif <C-O>mzprivate function %%%(%%%)<CR>{<CR>%%%<CR>}<C-O>'z;;
@@ -140,12 +171,12 @@ let g:lightline = {
 
 "========== Tagbar ==========
 if !&diff 
-    autocmd VimEnter * TagbarOpen
+    "autocmd VimEnter * TagbarOpen
 endif
 
 "========== VimFiler =======
 if !&diff
-    autocmd VimEnter * VimFilerExplorer
+    autocmd VimEnter * VimFilerExplore -split -simple -parent -winwidth=42 -toggle -no-quit
     autocmd VimEnter * wincmd p
 endif
 
@@ -156,10 +187,10 @@ let g:vimfiler_safe_mode_by_default = 0
 let g:vimfiler_expand_jump_to_first_child = 0
 let g:vimfiler_ignore_pattern = []
 
-nnoremap <Leader>d :<C-u>VimFilerExplorer -split -simple -parent -winwidth=35 -toggle -no-quit<CR>
-nnoremap <Leader>jf :<C-u>VimFilerExplorer -split -simple -parent -winwidth=35 -no-quit -find<CR>
+"nnoremap <Leader>d :<C-u>VimFilerExplorer -split -simple -parent -winwidth=35 -toggle -no-quit<CR>
+"nnoremap <Leader>jf :<C-u>VimFilerExplorer -split -simple -parent -winwidth=35 -no-quit -find<CR>
 
-nmap <C-g> :VimFilerExplorer -find<CR>
+nmap <C-g> :VimFilerExplorer -find -split -simple -parent -winwidth=42 -toggle -no-quit<CR>
 
 autocmd FileType vimfiler nunmap <buffer> x
 autocmd FileType vimfiler nmap <buffer> x <Plug>(vimfiler_toggle_mark_current_line)
@@ -172,8 +203,31 @@ autocmd FileType vimfiler nmap <silent><buffer><expr> <CR> vimfiler#smart_cursor
 \ "\<Plug>(vimfiler_expand_tree)",
 \ "\<Plug>(vimfiler_edit_file)")
 
+"========== MRU ===========
+let MRU_Window_Height = 15
+let MRU_Max_Menu_Entries = 15
+let MRU_Max_Submenu_Entries = 15
+let MRU_Auto_Close = 1
+
+"========== UndoTree =======
+let g:undotree_WindowLayout = 4
+
+" Tree width
+let g:undotree_SplitWidth = 40
+
+" Diff height
+let g:undotree_DiffpanelHeight = 20
+
+nnoremap <C-h> :UndotreeToggle<cr>
+
 "========== Vim-Test ========
-let test#strategy = "dispatch"
+let test#strategy = "vimux"
+
+nmap <silent> <C-n> :TestNearest<CR>
+nmap <silent> <C-t> :TestFile<CR>
+"nmap <silent> <C-a> :TestSuite<CR>
+nmap <silent> <C-x> :TestLast<CR>
+"nmap <silent> <leader>g :TestVisit<CR>
 
 "========== Search ==========
 set wildmenu 
