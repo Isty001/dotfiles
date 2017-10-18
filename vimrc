@@ -48,8 +48,11 @@ Plugin 'sheerun/vim-polyglot'
 " Code
 Plugin 'Raimondi/delimitMate'
 Plugin 'tpope/vim-surround'
-Plugin 'editorconfig/editorconfig-vim'
 Plugin 'vim-scripts/dbext.vim'
+
+" Editor
+Plugin 'editorconfig/editorconfig-vim'
+Plugin 'SirVer/ultisnips'
 
 " Git
 Plugin 'tpope/vim-fugitive'
@@ -107,6 +110,18 @@ set directory^=$HOME/.vim/tmp//
 set undofile
 set undodir=$HOME/.vim/tmp//
 
+"========= Word motion ==============
+
+let g:camelchar = "A-Z0-9.,;:{([`'\""
+
+nnoremap <silent><C-Left> :<C-u>call search('\C\<\<Bar>\%(^\<Bar>[^'.g:camelchar.']\@<=\)['.g:camelchar.']\<Bar>['.g:camelchar.']\ze\%([^'.g:camelchar.']\&\>\@!\)\<Bar>\%^','bW')<CR>
+nnoremap <silent><C-Right> :<C-u>call search('\C\<\<Bar>\%(^\<Bar>[^'.g:camelchar.']\@<=\)['.g:camelchar.']\<Bar>['.g:camelchar.']\ze\%([^'.g:camelchar.']\&\>\@!\)\<Bar>\%$','W')<CR>
+inoremap <silent><C-Left> <C-o>:call search('\C\<\<Bar>\%(^\<Bar>[^'.g:camelchar.']\@<=\)['.g:camelchar.']\<Bar>['.g:camelchar.']\ze\%([^'.g:camelchar.']\&\>\@!\)\<Bar>\%^','bW')<CR>
+inoremap <silent><C-Right> <C-o>:call search('\C\<\<Bar>\%(^\<Bar>[^'.g:camelchar.']\@<=\)['.g:camelchar.']\<Bar>['.g:camelchar.']\ze\%([^'.g:camelchar.']\&\>\@!\)\<Bar>\%$','W')<CR>
+vnoremap <silent><C-Left> :<C-U>call search('\C\<\<Bar>\%(^\<Bar>[^'.g:camelchar.']\@<=\)['.g:camelchar.']\<Bar>['.g:camelchar.']\ze\%([^'.g:camelchar.']\&\>\@!\)\<Bar>\%^','bW')<CR>v`>o
+vnoremap <silent><C-Right> <Esc>`>:<C-U>call search('\C\<\<Bar>\%(^\<Bar>[^'.g:camelchar.']\@<=\)['.g:camelchar.']\<Bar>['.g:camelchar.']\ze\%([^'.g:camelchar.']\&\>\@!\)\<Bar>\%$','W')<CR>v`<o
+
+
 "========= HightLight selected word ==
 set updatetime=10
 
@@ -136,26 +151,6 @@ if &term =~ '^screen'
     execute "set <xRight>=\e[1;*C"
     execute "set <xLeft>=\e[1;*D"
 endif
-
-"========== Templates ======
-
-" Go to next placeholder
-imap <buffer> ;; <C-O>/%%%<CR><C-O>c3l
-nmap <buffer> ;; /%%%<CR>c3l
-
-" PHP
-
-imap <buffer> ;fo <C-O>mzfor( %%%; %%%; %%%)<CR>{ // %%%<CR>%%%<CR>}<CR><C-O>'z;;
-
-imap <buffer> ;pubf <C-O>mzpublic function %%%(%%%)<CR>{<CR>%%%<CR>}<C-O>'z;;
-imap <buffer> ;prof <C-O>mzprotected function %%%(%%%)<CR>{<CR>%%%<CR>}<C-O>'z;;
-imap <buffer> ;prif <C-O>mzprivate function %%%(%%%)<CR>{<CR>%%%<CR>}<C-O>'z;;
-
-imap <buffer> ;pubsf <C-O>mzpublic static function %%%(%%%)<CR>{<CR>%%%<CR>}<C-O>'z;;
-imap <buffer> ;prosf <C-O>mzprotected static function %%%(%%%)<CR>{<CR>%%%<CR>}<C-O>'z;;
-imap <buffer> ;prisf <C-O>mzprivate static function %%%(%%%)<CR>{<CR>%%%<CR>}<C-O>'z;;
-
-imap <buffer> ;vd <C-O>mzvar_dump(%%%);<C-O>'z;;
 
 "========== Lightline ======
 let g:lightline = {
@@ -248,10 +243,10 @@ nmap <S-Tab> :bp<CR>
 
 "========== Keymap ========
 " Switch Window 
-nnoremap <C-Left> <C-w>h
-nnoremap <C-Down> <C-w>j
-nnoremap <C-Up> <C-w>k
-nnoremap <C-Right> <C-w>l
+nnoremap <C-w>Left <C-w>h
+nnoremap <C-w>Down <C-w>j
+nnoremap <C-w>Up <C-w>k
+nnoremap <C-w>Right <C-w>l
 
 nnoremap <C-c> :BD<CR>
 
