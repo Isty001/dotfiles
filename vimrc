@@ -3,75 +3,62 @@
 call plug#begin('~/.vim/plugged')
 
 " Autocomplete
+Plug 'Valloric/YouCompleteMe'
 Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
 
 "UI
 Plug 'Yggdroot/indentLine'
 
-call plug#end()
+Plug 'matze/vim-move'
 
-"=========== VUNDLE ==========
-
-set nocompatible              " be iMproved, required
-filetype off                  " required
-
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-Plugin 'VundleVim/Vundle.vim'
-
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'matze/vim-move'
-
-Plugin 'mileszs/ack.vim'
+" Search
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 
 "VimFiler
-Plugin 'Shougo/unite.vim'
-Plugin 'Shougo/vimfiler.vim'
+Plug 'Shougo/unite.vim'
+Plug 'Shougo/vimfiler.vim'
 
 " Theme 
-Plugin 'josuegaleas/jay'
+Plug 'josuegaleas/jay'
 
 " UI
-Plugin 'qpkorr/vim-bufkill'
-Plugin 'fholgado/minibufexpl.vim'
-Plugin 'majutsushi/tagbar'
-Plugin 'itchyny/lightline.vim'
+Plug 'qpkorr/vim-bufkill'
+Plug 'fholgado/minibufexpl.vim'
+Plug 'itchyny/lightline.vim'
 
 "History
-Plugin 'yegappan/mru'
-Plugin 'mbbill/undotree'
+Plug 'yegappan/mru'
+Plug 'mbbill/undotree'
 
 "Synthax highlight
-Plugin 'sheerun/vim-polyglot'
+Plug 'sheerun/vim-polyglot'
 
 " Code
-Plugin 'Raimondi/delimitMate'
-Plugin 'tpope/vim-surround'
-Plugin 'vim-scripts/dbext.vim'
+Plug 'Raimondi/delimitMate'
+Plug 'tpope/vim-surround'
 
 " Editor
-Plugin 'editorconfig/editorconfig-vim'
-Plugin 'SirVer/ultisnips'
+Plug 'editorconfig/editorconfig-vim'
+Plug 'SirVer/ultisnips'
 
 " Git
-Plugin 'tpope/vim-fugitive'
-Plugin 'airblade/vim-gitgutter'
-
-Plugin 'vim-scripts/vim-auto-save'
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
 
 " Build & Test
-Plugin 'janko-m/vim-test'
-Plugin 'tpope/vim-dispatch'
-Plugin 'reinh/vim-makegreen'
-Plugin 'benmills/vimux'
+Plug 'janko-m/vim-test'
+Plug 'benmills/vimux'
+
+" Notes
+Plug 'vimwiki/vimwiki'
 
 
-call vundle#end()
-filetype plugin indent on
+call plug#end()
 
 "========== ColorScheme ====
 syntax on
+filetype plugin on
 
 set background=dark
 colorscheme jay
@@ -80,9 +67,11 @@ colorscheme jay
 "=========== BASIC ==========
 silent! so .vimlocal
 
+set nocompatible
 set encoding=utf8
-
 set t_Co=256
+
+set history=200
 
 set hlsearch
 
@@ -101,8 +90,6 @@ set mouse=a
 
 " Use the system clipboard
 set clipboard=unnamedplus
-
-let g:auto_save = 1
 
 set noswapfile
 set directory^=$HOME/.vim/tmp//
@@ -135,9 +122,6 @@ endfunction
 
 autocmd! CursorHold,CursorHoldI * call HighlightWordUnderCursor()
 
-"========= ACK/AG ==============
-let g:ackprg = 'ag --skip-vcs-ignores --path-to-ignore=./.vim-ignore'
-
 "========== TMUX screen-256 fix ===
 if exists('$TMUX')
     set term=screen-256color
@@ -164,18 +148,12 @@ let g:lightline = {
       \ },
       \ }
 
-"========== Tagbar ==========
-if !&diff 
-    "autocmd VimEnter * TagbarOpen
-endif
-
 "========== VimFiler =======
 if !&diff
     autocmd VimEnter * VimFilerExplore -split -simple -parent -winwidth=42 -toggle -no-quit
     autocmd VimEnter * wincmd p
 endif
 
-set nocompatible
 let mapleader=" "
 let g:vimfiler_as_default_explorer = 1
 let g:vimfiler_safe_mode_by_default = 0
@@ -197,6 +175,22 @@ autocmd FileType vimfiler nmap <buffer> <C-R> <Plug>(vimfiler_redraw_screen)
 autocmd FileType vimfiler nmap <silent><buffer><expr> <CR> vimfiler#smart_cursor_map(
 \ "\<Plug>(vimfiler_expand_tree)",
 \ "\<Plug>(vimfiler_edit_file)")
+
+" ======== FZF ===========
+map <leader>f :Ag
+map <leader>n :FZF<CR>
+
+let s:ag_options = ' --skip-vcs-ignores --path-to-ignore=.vim-ignore'
+
+command! -bang -nargs=* Ag
+    \ call fzf#vim#ag(
+    \   <q-args>,
+    \   s:ag_options,
+    \  <bang>0 ? fzf#vim#with_preview('up:60%')
+    \        : fzf#vim#with_preview('right:50%:hidden', '?'),
+    \   <bang>0
+    \ )
+
 
 "========== MRU ===========
 let MRU_Window_Height = 15
@@ -240,6 +234,13 @@ let g:miniBufExplModSelTarget = 1
 
 nmap <Tab> :bn<CR>
 nmap <S-Tab> :bp<CR>
+
+"========== VimWiki ======
+
+let wiki = {}
+let wiki.path = '~/vimwiki/'
+let wiki.nested_syntaxes = {'python': 'python', 'c++': 'cpp', 'c': 'c', 'php': 'php', 'json': 'json'}
+let g:vimwiki_list = [wiki]
 
 "========== Keymap ========
 " Switch Window 
