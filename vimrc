@@ -7,7 +7,7 @@ Plug 'Valloric/YouCompleteMe'
 Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
 
 "UI
-Plug 'Yggdroot/indentLine'
+"Plug 'Yggdroot/indentLine'
 
 Plug 'matze/vim-move'
 
@@ -16,11 +16,17 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
 "VimFiler
-Plug 'Shougo/unite.vim'
-Plug 'Shougo/vimfiler.vim'
+"Plug 'Shougo/unite.vim'
+"Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+"Plug 'Shougo/vimfiler.vim'
+
+" NERDTree
+Plug 'scrooloose/nerdtree'
+"Plug 'Xuyuanp/nerdtree-git-plugin'
 
 " Theme 
-Plug 'josuegaleas/jay'
+"Plug 'josuegaleas/jay'
+Plug 'dracula/vim'
 
 " UI
 Plug 'qpkorr/vim-bufkill'
@@ -32,11 +38,16 @@ Plug 'yegappan/mru'
 Plug 'mbbill/undotree'
 
 "Synthax highlight
-Plug 'sheerun/vim-polyglot'
+"Plug 'sheerun/vim-polyglot'
 
-" Code
+" Editor
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-surround'
+Plug 'dkprice/vim-easygrep'
+
+" PHP
+Plug 'docteurklein/php-getter-setter.vim'
+Plug 'adoy/vim-php-refactoring-toolbox'
 
 " Editor
 Plug 'editorconfig/editorconfig-vim'
@@ -53,6 +64,9 @@ Plug 'benmills/vimux'
 " Notes
 Plug 'vimwiki/vimwiki'
 
+" Game
+Plug 'johngrib/vim-game-code-break'
+Plug 'johngrib/vim-game-snake'
 
 call plug#end()
 
@@ -61,17 +75,23 @@ syntax on
 filetype plugin on
 
 set background=dark
-colorscheme jay
+colorscheme dracula
 
 
 "=========== BASIC ==========
 silent! so .vimlocal
+
+let mapleader=" "
 
 set nocompatible
 set encoding=utf8
 set t_Co=256
 
 set history=200
+
+set ttyfast
+set lazyredraw
+set nocursorline
 
 set hlsearch
 
@@ -84,7 +104,10 @@ set tabstop=4
 set shiftwidth=4
 set softtabstop=4
 set expandtab
-set nu
+
+"set nu
+set norelativenumber
+
 set nowrap
 set mouse=a
 
@@ -125,7 +148,7 @@ autocmd! CursorHold,CursorHoldI * call HighlightWordUnderCursor()
 "========== TMUX screen-256 fix ===
 if exists('$TMUX')
     set term=screen-256color
-set t_8f=^[[38;2;%lu;%lu;%lum
+    set t_8f=^[[38;2;%lu;%lu;%lum
 endif
 
 if &term =~ '^screen'
@@ -138,7 +161,7 @@ endif
 
 "========== Lightline ======
 let g:lightline = {
-      \ 'colorscheme': 'jay',
+      \ 'colorscheme': 'default',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
@@ -148,13 +171,22 @@ let g:lightline = {
       \ },
       \ }
 
-"========== VimFiler =======
+"========== VimFiler / NERDTree =======
+
 if !&diff
-    autocmd VimEnter * VimFilerExplore -split -simple -parent -winwidth=42 -toggle -no-quit
+"    autocmd VimEnter * VimFilerExplore -split -simple -parent -winwidth=42 -toggle -no-quit
+    autocmd vimenter * NERDTree
+    autocmd StdinReadPre * let s:std_in=1
+    autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
     autocmd VimEnter * wincmd p
 endif
 
-let mapleader=" "
+nmap <C-g> :NERDTreeFind<CR>
+
+
 let g:vimfiler_as_default_explorer = 1
 let g:vimfiler_safe_mode_by_default = 0
 let g:vimfiler_expand_jump_to_first_child = 0
@@ -163,22 +195,22 @@ let g:vimfiler_ignore_pattern = []
 "nnoremap <Leader>d :<C-u>VimFilerExplorer -split -simple -parent -winwidth=35 -toggle -no-quit<CR>
 "nnoremap <Leader>jf :<C-u>VimFilerExplorer -split -simple -parent -winwidth=35 -no-quit -find<CR>
 
-nmap <C-g> :VimFilerExplorer -find -split -simple -parent -winwidth=42 -toggle -no-quit<CR>
+"nmap <C-g> :VimFilerExplorer -find -split -simple -parent -winwidth=42 -toggle -no-quit<CR>
 
-autocmd FileType vimfiler nunmap <buffer> x
-autocmd FileType vimfiler nmap <buffer> x <Plug>(vimfiler_toggle_mark_current_line)
-autocmd FileType vimfiler vmap <buffer> x <Plug>(vimfiler_toggle_mark_selected_lines)
-autocmd FileType vimfiler nunmap <buffer> l
-autocmd FileType vimfiler nmap <buffer> l <Plug>(vimfiler_cd_or_edit)
-autocmd FileType vimfiler nmap <buffer> h <Plug>(vimfiler_switch_to_parent_directory)
-autocmd FileType vimfiler nmap <buffer> <C-R> <Plug>(vimfiler_redraw_screen)
-autocmd FileType vimfiler nmap <silent><buffer><expr> <CR> vimfiler#smart_cursor_map(
+"autocmd FileType vimfiler nunmap <buffer> x
+"autocmd FileType vimfiler nmap <buffer> x <Plug>(vimfiler_toggle_mark_current_line)
+"autocmd FileType vimfiler vmap <buffer> x <Plug>(vimfiler_toggle_mark_selected_lines)
+"autocmd FileType vimfiler nunmap <buffer> l
+"autocmd FileType vimfiler nmap <buffer> l <Plug>(vimfiler_cd_or_edit)
+"autocmd FileType vimfiler nmap <buffer> h <Plug>(vimfiler_switch_to_parent_directory)
+"autocmd FileType vimfiler nmap <buffer> <C-R> <Plug>(vimfiler_redraw_screen)
+"autocmd FileType vimfiler nmap <silent><buffer><expr> <CR> vimfiler#smart_cursor_map(
 \ "\<Plug>(vimfiler_expand_tree)",
 \ "\<Plug>(vimfiler_edit_file)")
 
 " ======== FZF ===========
-map <leader>f :Ag
-map <leader>n :FZF<CR>
+map <leader>f :Ag<CR>
+map <leader>m :FZF<CR>
 
 let s:ag_options = ' --skip-vcs-ignores --path-to-ignore=.vim-ignore'
 
