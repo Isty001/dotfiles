@@ -2,6 +2,10 @@
 
 call plug#begin('~/.vim/plugged')
 
+
+" Lint
+Plug 'w0rp/ale' "ALE must be loaded before YCM in order not to screw with the completion
+
 " Autocomplete
 Plug 'Valloric/YouCompleteMe'
 Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
@@ -24,9 +28,11 @@ Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
 "Plug 'Xuyuanp/nerdtree-git-plugin'
 
-" Theme 
+" Theme
 "Plug 'josuegaleas/jay'
 Plug 'dracula/vim'
+Plug 'vim-scripts/dante.vim'
+Plug 'gkjgh/cobalt'
 
 " UI
 Plug 'qpkorr/vim-bufkill'
@@ -37,9 +43,6 @@ Plug 'itchyny/lightline.vim'
 Plug 'yegappan/mru'
 Plug 'mbbill/undotree'
 
-"Synthax highlight
-"Plug 'sheerun/vim-polyglot'
-
 " Editor
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-surround'
@@ -48,6 +51,7 @@ Plug 'dkprice/vim-easygrep'
 " PHP
 Plug 'docteurklein/php-getter-setter.vim'
 Plug 'adoy/vim-php-refactoring-toolbox'
+Plug 'arnaud-lb/vim-php-namespace'
 
 " Editor
 Plug 'editorconfig/editorconfig-vim'
@@ -105,7 +109,7 @@ set shiftwidth=4
 set softtabstop=4
 set expandtab
 
-"set nu
+set nu
 set norelativenumber
 
 set nowrap
@@ -119,6 +123,11 @@ set directory^=$HOME/.vim/tmp//
 
 set undofile
 set undodir=$HOME/.vim/tmp//
+
+"========= Keep cursor and window position on change
+
+au BufLeave * let b:winview = winsaveview()
+au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
 
 "========= Word motion ==============
 
@@ -158,6 +167,15 @@ if &term =~ '^screen'
     execute "set <xRight>=\e[1;*C"
     execute "set <xLeft>=\e[1;*D"
 endif
+
+" ========= PHP ===========
+function! IPhpInsertUse()
+    call PhpInsertUse()
+    call feedkeys('a',  'n')
+endfunction
+autocmd FileType php inoremap <Leader>u <Esc>:call IPhpInsertUse()<CR>
+autocmd FileType php noremap <Leader>u :call PhpInsertUse()<CR>
+
 
 "========== Lightline ======
 let g:lightline = {
