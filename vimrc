@@ -19,25 +19,19 @@ Plug 'matze/vim-move'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
-"VimFiler
-"Plug 'Shougo/unite.vim'
-"Plug 'Shougo/vimproc.vim', {'do' : 'make'}
-"Plug 'Shougo/vimfiler.vim'
-
 " NERDTree
 Plug 'scrooloose/nerdtree'
-"Plug 'Xuyuanp/nerdtree-git-plugin'
 
-" Theme
-"Plug 'josuegaleas/jay'
+" Color
 Plug 'dracula/vim'
-Plug 'vim-scripts/dante.vim'
-Plug 'gkjgh/cobalt'
+Plug 'nightsense/plumber'
+Plug 'fxn/vim-monochrome'
 
 " UI
 Plug 'qpkorr/vim-bufkill'
-Plug 'fholgado/minibufexpl.vim'
-Plug 'itchyny/lightline.vim'
+"Plug 'fholgado/minibufexpl.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
 "History
 Plug 'yegappan/mru'
@@ -47,15 +41,20 @@ Plug 'mbbill/undotree'
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-surround'
 Plug 'dkprice/vim-easygrep'
+Plug 'vim-scripts/vim-auto-save'
 
 " PHP
 Plug 'docteurklein/php-getter-setter.vim'
 Plug 'adoy/vim-php-refactoring-toolbox'
 Plug 'arnaud-lb/vim-php-namespace'
 
+Plug 'tobyS/vmustache'
+Plug 'tobyS/pdv'
+
 " Editor
 Plug 'editorconfig/editorconfig-vim'
 Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 
 " Git
 Plug 'tpope/vim-fugitive'
@@ -78,7 +77,7 @@ call plug#end()
 syntax on
 filetype plugin on
 
-set background=dark
+"set background=dark
 colorscheme dracula
 
 
@@ -124,10 +123,13 @@ set directory^=$HOME/.vim/tmp//
 set undofile
 set undodir=$HOME/.vim/tmp//
 
+let g:auto_save = 1
+let g:auto_save_in_insert_mode = 0
+
 "========= Keep cursor and window position on change
 
-au BufLeave * let b:winview = winsaveview()
-au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
+"au BufLeave * let b:winview = winsaveview()
+"au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
 
 "========= Word motion ==============
 
@@ -145,7 +147,7 @@ vnoremap <silent><C-Right> <Esc>`>:<C-U>call search('\C\<\<Bar>\%(^\<Bar>[^'.g:c
 set updatetime=10
 
 function! HighlightWordUnderCursor()
-    if getline(".")[col(".")-1] !~# '[[:punct:][:blank:]]'
+    if bufname("%") !~ '^NERD' && getline(".")[col(".")-1] !~# '[[:punct:][:blank:]]'
         exec 'match' 'Search' '/\V\<'.expand('<cword>').'\>/'
     else
         match none
@@ -173,9 +175,19 @@ function! IPhpInsertUse()
     call PhpInsertUse()
     call feedkeys('a',  'n')
 endfunction
-autocmd FileType php inoremap <Leader>u <Esc>:call IPhpInsertUse()<CR>
-autocmd FileType php noremap <Leader>u :call PhpInsertUse()<CR>
 
+autocmd FileType php inoremap <C-u> <Esc>:call IPhpInsertUse()<CR>
+autocmd FileType php noremap <C-u> :call PhpInsertUse()<CR>
+
+let g:php_namespace_sort_after_insert = 1
+
+" ======== Snippets =======
+
+"let g:UltiSnipsExpandTrigger="
+
+" PHPDoc
+let g:pdv_template_dir = $HOME ."/.vim/plugged/pdv/templates_snip"
+nnoremap <buffer> <C-p> :call pdv#DocumentWithSnip()<CR>
 
 "========== Lightline ======
 let g:lightline = {
@@ -189,10 +201,14 @@ let g:lightline = {
       \ },
       \ }
 
+let g:airline#extensions#tabline#enabled = 1
+
 "========== VimFiler / NERDTree =======
 
+let NERDTreeShowHidden=1
+let g:NERDTreeWinSize=35
+
 if !&diff
-"    autocmd VimEnter * VimFilerExplore -split -simple -parent -winwidth=42 -toggle -no-quit
     autocmd vimenter * NERDTree
     autocmd StdinReadPre * let s:std_in=1
     autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
@@ -227,8 +243,8 @@ let g:vimfiler_ignore_pattern = []
 \ "\<Plug>(vimfiler_edit_file)")
 
 " ======== FZF ===========
-map <leader>f :Ag<CR>
-map <leader>m :FZF<CR>
+map <Leader>f :Ag<CR>
+map <Leader>m :FZF<CR>
 
 let s:ag_options = ' --skip-vcs-ignores --path-to-ignore=.vim-ignore'
 
@@ -263,13 +279,13 @@ nnoremap <C-h> :UndotreeToggle<cr>
 let test#strategy = "vimux"
 
 nmap <silent> <C-n> :TestNearest<CR>
-nmap <silent> <C-t> :TestFile<CR>
+nmap <silent> <C-x> :TestFile<CR>
 "nmap <silent> <C-a> :TestSuite<CR>
-nmap <silent> <C-x> :TestLast<CR>
+nmap <silent> <C-t> :TestLast<CR>
 "nmap <silent> <leader>g :TestVisit<CR>
 
 "========== Search ==========
-set wildmenu 
+set wildmenu
 set wildmode=longest:full,full
 
 "========== YCM ============
