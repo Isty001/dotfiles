@@ -7,8 +7,9 @@ call plug#begin('~/.vim/plugged')
 Plug 'w0rp/ale' "ALE must be loaded before YCM in order not to screw with the completion
 
 " Autocomplete
-Plug 'Valloric/YouCompleteMe'
+Plug 'Valloric/YouCompleteMe', {'do': './install.py --clang-completer --rust-completer'}
 Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
+"Plug 'shawncplus/phpcomplete.vim'
 
 "UI
 "Plug 'Yggdroot/indentLine'
@@ -42,11 +43,18 @@ Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-surround'
 Plug 'dkprice/vim-easygrep'
 Plug 'vim-scripts/vim-auto-save'
+Plug 'kien/rainbow_parentheses.vim'
+
+" Tags
+Plug 'majutsushi/tagbar'
 
 " PHP
 Plug 'docteurklein/php-getter-setter.vim'
 Plug 'adoy/vim-php-refactoring-toolbox'
 Plug 'arnaud-lb/vim-php-namespace'
+
+" SQL
+Plug 'vim-scripts/dbext.vim'
 
 Plug 'tobyS/vmustache'
 Plug 'tobyS/pdv'
@@ -59,6 +67,7 @@ Plug 'honza/vim-snippets'
 " Git
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
+Plug 'kablamo/vim-git-log'
 
 " Build & Test
 Plug 'janko-m/vim-test'
@@ -75,9 +84,9 @@ call plug#end()
 
 "========== ColorScheme ====
 syntax on
-filetype plugin on
+filetype plugin indent on
 
-"set background=dark
+set background=dark
 colorscheme dracula
 
 
@@ -156,6 +165,30 @@ endfunction
 
 autocmd! CursorHold,CursorHoldI * call HighlightWordUnderCursor()
 
+"========= Rainbow Parentheses
+
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
+
+let g:rbpt_colorpairs = [
+    \ ['Darkblue',    'SeaGreen3'],
+    \ ['darkgray',    'DarkOrchid3'],
+    \ ['darkgreen',   'firebrick3'],
+    \ ['darkcyan',    'RoyalBlue3'],
+    \ ['darkred',     'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['brown',       'firebrick3'],
+    \ ['gray',        'RoyalBlue3'],
+    \ ['black',       'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['Darkblue',    'firebrick3'],
+    \ ['darkgreen',   'RoyalBlue3'],
+    \ ['darkcyan',    'SeaGreen3'],
+    \ ['darkred',     'DarkOrchid3'],
+    \ ]
+
 "========== TMUX screen-256 fix ===
 if exists('$TMUX')
     set term=screen-256color
@@ -181,13 +214,22 @@ autocmd FileType php noremap <C-u> :call PhpInsertUse()<CR>
 
 let g:php_namespace_sort_after_insert = 1
 
+" ======== Tags ==========
+if !&diff
+    "autocmd VimEnter * nested :TagbarOpen
+endif
+
+
+" For PHP in .vimlocal: let g:autotagCtagsCmd="ctags -R --fields=+aimlS --languages=php --PHP-kinds=+cfit-va vcorbis-common"
+
 " ======== Snippets =======
 
 "let g:UltiSnipsExpandTrigger="
 
-" PHPDoc
+" ======== PHPDoc
+
 let g:pdv_template_dir = $HOME ."/.vim/plugged/pdv/templates_snip"
-nnoremap <buffer> <C-p> :call pdv#DocumentWithSnip()<CR>
+nnoremap <buffer> <leader>d :call pdv#DocumentWithSnip()<CR>
 
 "========== Lightline ======
 let g:lightline = {
@@ -218,7 +260,8 @@ if !&diff
     autocmd VimEnter * wincmd p
 endif
 
-nmap <C-g> :NERDTreeFind<CR>
+nmap <C-g> :NERDTreeFind<CR><C-W>Right<CR>
+
 
 
 let g:vimfiler_as_default_explorer = 1
@@ -247,6 +290,8 @@ map <Leader>f :Ag<CR>
 map <Leader>m :FZF<CR>
 
 let s:ag_options = ' --skip-vcs-ignores --path-to-ignore=.vim-ignore'
+
+let $FZF_DEFAULT_COMMAND = 'ag -g ""' . s:ag_options
 
 command! -bang -nargs=* Ag
     \ call fzf#vim#ag(
@@ -318,3 +363,36 @@ nnoremap <C-w>Right <C-w>l
 nnoremap <C-c> :BD<CR>
 
 let g:move_key_modifier = 'C'
+
+"""""
+
+" :call SwapWords({'foo':'bar'})
+" :call SwapWords({'foo/bar':'foo/baz'}, '@')
+
+" https://stackoverflow.com/questions/3578549/easiest-way-to-swap-occurrences-of-two-strings-in-vim
+
+function! Mirror(dict)
+    for [key, value] in items(a:dict)
+        let a:dict[value] = key
+    endfor
+    return a:dict
+endfunction
+
+function! S(number)
+    return submatch(a:number)
+endfunction
+
+function! SwapWords(dict, ...)
+    let words = keys(a:dict) + values(a:dict)
+    let words = map(words, 'escape(v:val, "|")')
+    if(a:0 == 1)
+        let delimiter = a:1
+    else
+        let delimiter = '/'
+    endif
+    let pattern = '\v(' . join(words, '|') . ')'
+    exe '%s' . delimiter . pattern . delimiter
+        \ . '\=' . string(Mirror(a:dict)) . '[S(0)]'
+        \ . delimiter . 'g'
+endfunction
+
