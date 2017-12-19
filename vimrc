@@ -6,15 +6,11 @@ call plug#begin('~/.vim/plugged')
 " Lint
 Plug 'w0rp/ale' "ALE must be loaded before YCM in order not to screw with the completion
 
-" Autocomplete
-Plug 'Valloric/YouCompleteMe', {'do': './install.py --clang-completer --rust-completer'}
+" Autocomplete, tags
+Plug 'Valloric/YouCompleteMe', {'do': './install.py --clang-completer'}
 Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
+Plug 'ludovicchabant/vim-gutentags'
 "Plug 'shawncplus/phpcomplete.vim'
-
-"UI
-"Plug 'Yggdroot/indentLine'
-
-Plug 'matze/vim-move'
 
 " Search
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -25,12 +21,9 @@ Plug 'scrooloose/nerdtree'
 
 " Color
 Plug 'dracula/vim'
-Plug 'nightsense/plumber'
-Plug 'fxn/vim-monochrome'
 
 " UI
 Plug 'qpkorr/vim-bufkill'
-"Plug 'fholgado/minibufexpl.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
@@ -41,20 +34,15 @@ Plug 'mbbill/undotree'
 " Editor
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-surround'
-Plug 'dkprice/vim-easygrep'
 Plug 'vim-scripts/vim-auto-save'
-Plug 'kien/rainbow_parentheses.vim'
-
-" Tags
-Plug 'majutsushi/tagbar'
+Plug 'dkprice/vim-easygrep'
+Plug 'matze/vim-move'
+Plug 'thiagoalessio/rainbow_levels.vim'
 
 " PHP
 Plug 'docteurklein/php-getter-setter.vim'
 Plug 'adoy/vim-php-refactoring-toolbox'
 Plug 'arnaud-lb/vim-php-namespace'
-
-" SQL
-Plug 'vim-scripts/dbext.vim'
 
 Plug 'tobyS/vmustache'
 Plug 'tobyS/pdv'
@@ -82,7 +70,89 @@ Plug 'johngrib/vim-game-snake'
 
 call plug#end()
 
-"========== ColorScheme ====
+
+" ============
+" == Keymap ==
+" ============
+
+let mapleader=" "
+
+" == Search
+nmap <C-g> :NERDTreeFind<CR><C-W>Right<CR>
+map <Leader>m :FZF<CR>
+
+" == Windows
+nnoremap <C-w>Left <C-w>h
+nnoremap <C-w>Down <C-w>j
+nnoremap <C-w>Up <C-w>k
+nnoremap <C-w>Right <C-w>l
+
+nnoremap <C-c> :BD<CR>
+
+" == Line moving
+let g:move_key_modifier = 'C'
+
+" == Word motion
+let g:camelchar = "A-Z0-9.,;:{([`'\""
+
+nnoremap <silent><C-Left> :<C-u>call search('\C\<\<Bar>\%(^\<Bar>[^'.g:camelchar.']\@<=\)['.g:camelchar.']\<Bar>['.g:camelchar.']\ze\%([^'.g:camelchar.']\&\>\@!\)\<Bar>\%^','bW')<CR>
+nnoremap <silent><C-Right> :<C-u>call search('\C\<\<Bar>\%(^\<Bar>[^'.g:camelchar.']\@<=\)['.g:camelchar.']\<Bar>['.g:camelchar.']\ze\%([^'.g:camelchar.']\&\>\@!\)\<Bar>\%$','W')<CR>
+inoremap <silent><C-Left> <C-o>:call search('\C\<\<Bar>\%(^\<Bar>[^'.g:camelchar.']\@<=\)['.g:camelchar.']\<Bar>['.g:camelchar.']\ze\%([^'.g:camelchar.']\&\>\@!\)\<Bar>\%^','bW')<CR>
+inoremap <silent><C-Right> <C-o>:call search('\C\<\<Bar>\%(^\<Bar>[^'.g:camelchar.']\@<=\)['.g:camelchar.']\<Bar>['.g:camelchar.']\ze\%([^'.g:camelchar.']\&\>\@!\)\<Bar>\%$','W')<CR>
+vnoremap <silent><C-Left> :<C-U>call search('\C\<\<Bar>\%(^\<Bar>[^'.g:camelchar.']\@<=\)['.g:camelchar.']\<Bar>['.g:camelchar.']\ze\%([^'.g:camelchar.']\&\>\@!\)\<Bar>\%^','bW')<CR>v`>o
+vnoremap <silent><C-Right> <Esc>`>:<C-U>call search('\C\<\<Bar>\%(^\<Bar>[^'.g:camelchar.']\@<=\)['.g:camelchar.']\<Bar>['.g:camelchar.']\ze\%([^'.g:camelchar.']\&\>\@!\)\<Bar>\%$','W')<CR>v`<o
+
+" ==Navigate between tabs
+nmap <Tab> :bn<CR>
+nmap <S-Tab> :bp<CR>
+
+" == Test runner
+nmap <silent> <C-n> :TestNearest<CR>
+nmap <silent> <C-x> :TestFile<CR>
+nmap <silent> <C-t> :TestLast<CR>
+"nmap <silent> <C-a> :TestSuite<CR>
+"nmap <silent> <leader>g :TestVisit<CR>
+
+" == History
+nnoremap <C-h> :UndotreeToggle<cr>
+
+" == Indentation highlight
+map <leader>l :RainbowLevelsToggle<cr>
+
+" == Navigation
+autocmd FileType *c* nnoremap <buffer> <C-]> :YcmCompleter GoTo<CR>
+
+" == Use PHP class under cursor
+autocmd FileType php inoremap <C-u> <Esc>:call IPhpInsertUse()<CR>
+autocmd FileType php noremap <C-u> :call PhpInsertUse()<CR>
+
+" == PHP doc
+nnoremap <buffer> <leader>d :call pdv#DocumentWithSnip()<CR>
+
+
+" ==========
+" == TMUX ==
+" ==========
+
+if exists('$TMUX')
+    set term=screen-256color
+    set t_8f=^[[38;2;%lu;%lu;%lum
+    set t_8b=^[[48;2;%lu;%lu;%lum
+endif
+
+if &term =~ '^screen'
+    " tmux will send xterm-style keys when its xterm-keys option is on
+    execute "set <xUp>=\e[1;*A"
+    execute "set <xDown>=\e[1;*B"
+    execute "set <xRight>=\e[1;*C"
+    execute "set <xLeft>=\e[1;*D"
+endif
+
+
+" =================
+" == ColorScheme ==
+" =================
+
 syntax on
 filetype plugin indent on
 
@@ -90,28 +160,32 @@ set background=dark
 colorscheme dracula
 
 
-"=========== BASIC ==========
-silent! so .vimlocal
+" ==================
+" == VIM SETTINGS ==
+" ==================
 
-let mapleader=" "
+" == Project settings
+silent! so .vimlocal
 
 set nocompatible
 set encoding=utf8
 set t_Co=256
 
-set history=200
+set history=300
 
 set ttyfast
-set lazyredraw
 set nocursorline
+
+"This makes the autocomplete dropdown flashing and slowish :-(
+"set lazyredraw
 
 set hlsearch
 
 set list
 set listchars=tab:>-,trail:.,extends:>,precedes:<
-
 set backspace=indent,eol,start
 
+" == Default indent
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
@@ -123,36 +197,29 @@ set norelativenumber
 set nowrap
 set mouse=a
 
-" Use the system clipboard
+" == Use the system clipboard
 set clipboard=unnamedplus
 
+" == Working dir of Vim files
 set noswapfile
 set directory^=$HOME/.vim/tmp//
 
 set undofile
 set undodir=$HOME/.vim/tmp//
 
+
+" ==============
+" == AutoSave ==
+" ==============
+
 let g:auto_save = 1
 let g:auto_save_in_insert_mode = 0
 
-"========= Keep cursor and window position on change
 
-"au BufLeave * let b:winview = winsaveview()
-"au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
+" ==================================
+" == Hightlight word under cursor ==
+" ==================================
 
-"========= Word motion ==============
-
-let g:camelchar = "A-Z0-9.,;:{([`'\""
-
-nnoremap <silent><C-Left> :<C-u>call search('\C\<\<Bar>\%(^\<Bar>[^'.g:camelchar.']\@<=\)['.g:camelchar.']\<Bar>['.g:camelchar.']\ze\%([^'.g:camelchar.']\&\>\@!\)\<Bar>\%^','bW')<CR>
-nnoremap <silent><C-Right> :<C-u>call search('\C\<\<Bar>\%(^\<Bar>[^'.g:camelchar.']\@<=\)['.g:camelchar.']\<Bar>['.g:camelchar.']\ze\%([^'.g:camelchar.']\&\>\@!\)\<Bar>\%$','W')<CR>
-inoremap <silent><C-Left> <C-o>:call search('\C\<\<Bar>\%(^\<Bar>[^'.g:camelchar.']\@<=\)['.g:camelchar.']\<Bar>['.g:camelchar.']\ze\%([^'.g:camelchar.']\&\>\@!\)\<Bar>\%^','bW')<CR>
-inoremap <silent><C-Right> <C-o>:call search('\C\<\<Bar>\%(^\<Bar>[^'.g:camelchar.']\@<=\)['.g:camelchar.']\<Bar>['.g:camelchar.']\ze\%([^'.g:camelchar.']\&\>\@!\)\<Bar>\%$','W')<CR>
-vnoremap <silent><C-Left> :<C-U>call search('\C\<\<Bar>\%(^\<Bar>[^'.g:camelchar.']\@<=\)['.g:camelchar.']\<Bar>['.g:camelchar.']\ze\%([^'.g:camelchar.']\&\>\@!\)\<Bar>\%^','bW')<CR>v`>o
-vnoremap <silent><C-Right> <Esc>`>:<C-U>call search('\C\<\<Bar>\%(^\<Bar>[^'.g:camelchar.']\@<=\)['.g:camelchar.']\<Bar>['.g:camelchar.']\ze\%([^'.g:camelchar.']\&\>\@!\)\<Bar>\%$','W')<CR>v`<o
-
-
-"========= HightLight selected word ==
 set updatetime=10
 
 function! HighlightWordUnderCursor()
@@ -165,87 +232,41 @@ endfunction
 
 autocmd! CursorHold,CursorHoldI * call HighlightWordUnderCursor()
 
-"========= Rainbow Parentheses
 
-au VimEnter * RainbowParenthesesToggle
-au Syntax * RainbowParenthesesLoadRound
-au Syntax * RainbowParenthesesLoadSquare
-au Syntax * RainbowParenthesesLoadBraces
+" =========
+" == PHP ==
+" =========
 
-let g:rbpt_colorpairs = [
-    \ ['Darkblue',    'SeaGreen3'],
-    \ ['darkgray',    'DarkOrchid3'],
-    \ ['darkgreen',   'firebrick3'],
-    \ ['darkcyan',    'RoyalBlue3'],
-    \ ['darkred',     'SeaGreen3'],
-    \ ['darkmagenta', 'DarkOrchid3'],
-    \ ['brown',       'firebrick3'],
-    \ ['gray',        'RoyalBlue3'],
-    \ ['black',       'SeaGreen3'],
-    \ ['darkmagenta', 'DarkOrchid3'],
-    \ ['Darkblue',    'firebrick3'],
-    \ ['darkgreen',   'RoyalBlue3'],
-    \ ['darkcyan',    'SeaGreen3'],
-    \ ['darkred',     'DarkOrchid3'],
-    \ ]
-
-"========== TMUX screen-256 fix ===
-if exists('$TMUX')
-    set term=screen-256color
-    set t_8f=^[[38;2;%lu;%lu;%lum
-endif
-
-if &term =~ '^screen'
-    " tmux will send xterm-style keys when its xterm-keys option is on
-    execute "set <xUp>=\e[1;*A"
-    execute "set <xDown>=\e[1;*B"
-    execute "set <xRight>=\e[1;*C"
-    execute "set <xLeft>=\e[1;*D"
-endif
-
-" ========= PHP ===========
 function! IPhpInsertUse()
     call PhpInsertUse()
-    call feedkeys('a',  'n')
+    call feedkeys('a', 'n')
 endfunction
 
-autocmd FileType php inoremap <C-u> <Esc>:call IPhpInsertUse()<CR>
-autocmd FileType php noremap <C-u> :call PhpInsertUse()<CR>
 
 let g:php_namespace_sort_after_insert = 1
 
-" ======== Tags ==========
-if !&diff
-    "autocmd VimEnter * nested :TagbarOpen
-endif
-
-
-" For PHP in .vimlocal: let g:autotagCtagsCmd="ctags -R --fields=+aimlS --languages=php --PHP-kinds=+cfit-va vcorbis-common"
-
-" ======== Snippets =======
-
-"let g:UltiSnipsExpandTrigger="
-
-" ======== PHPDoc
-
+" == Doc generation
 let g:pdv_template_dir = $HOME ."/.vim/plugged/pdv/templates_snip"
-nnoremap <buffer> <leader>d :call pdv#DocumentWithSnip()<CR>
 
-"========== Lightline ======
-let g:lightline = {
-      \ 'colorscheme': 'default',
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-      \ },
-      \ 'component_function': {
-      \   'gitbranch': 'fugitive#head',
-      \ },
-      \ }
+
+" ====================
+" == Tag generation ==
+" ====================
+
+let g:gutentags_project_root = ['src']
+let g:gutentags_cache_dir = "~/.cache/tags"
+
+
+" =============
+" == Tabline ==
+" =============
 
 let g:airline#extensions#tabline#enabled = 1
 
-"========== VimFiler / NERDTree =======
+
+" ==============
+" == NERDTree ==
+" ==============
 
 let NERDTreeShowHidden=1
 let g:NERDTreeWinSize=35
@@ -260,34 +281,10 @@ if !&diff
     autocmd VimEnter * wincmd p
 endif
 
-nmap <C-g> :NERDTreeFind<CR><C-W>Right<CR>
 
-
-
-let g:vimfiler_as_default_explorer = 1
-let g:vimfiler_safe_mode_by_default = 0
-let g:vimfiler_expand_jump_to_first_child = 0
-let g:vimfiler_ignore_pattern = []
-
-"nnoremap <Leader>d :<C-u>VimFilerExplorer -split -simple -parent -winwidth=35 -toggle -no-quit<CR>
-"nnoremap <Leader>jf :<C-u>VimFilerExplorer -split -simple -parent -winwidth=35 -no-quit -find<CR>
-
-"nmap <C-g> :VimFilerExplorer -find -split -simple -parent -winwidth=42 -toggle -no-quit<CR>
-
-"autocmd FileType vimfiler nunmap <buffer> x
-"autocmd FileType vimfiler nmap <buffer> x <Plug>(vimfiler_toggle_mark_current_line)
-"autocmd FileType vimfiler vmap <buffer> x <Plug>(vimfiler_toggle_mark_selected_lines)
-"autocmd FileType vimfiler nunmap <buffer> l
-"autocmd FileType vimfiler nmap <buffer> l <Plug>(vimfiler_cd_or_edit)
-"autocmd FileType vimfiler nmap <buffer> h <Plug>(vimfiler_switch_to_parent_directory)
-"autocmd FileType vimfiler nmap <buffer> <C-R> <Plug>(vimfiler_redraw_screen)
-"autocmd FileType vimfiler nmap <silent><buffer><expr> <CR> vimfiler#smart_cursor_map(
-\ "\<Plug>(vimfiler_expand_tree)",
-\ "\<Plug>(vimfiler_edit_file)")
-
-" ======== FZF ===========
-map <Leader>f :Ag<CR>
-map <Leader>m :FZF<CR>
+" ===================
+" == Search FZF/AG ==
+" ===================
 
 let s:ag_options = ' --skip-vcs-ignores --path-to-ignore=.vim-ignore'
 
@@ -303,70 +300,61 @@ command! -bang -nargs=* Ag
     \ )
 
 
-"========== MRU ===========
+" =========
+" == MRU ==
+" =========
+
 let MRU_Window_Height = 15
 let MRU_Max_Menu_Entries = 15
 let MRU_Max_Submenu_Entries = 15
 let MRU_Auto_Close = 1
 
-"========== UndoTree =======
+
+" ==============
+" == UndoTree ==
+" ==============
+
 let g:undotree_WindowLayout = 4
 
-" Tree width
+" == Width
 let g:undotree_SplitWidth = 40
 
-" Diff height
+" == Height
 let g:undotree_DiffpanelHeight = 20
 
-nnoremap <C-h> :UndotreeToggle<cr>
 
-"========== Vim-Test ========
+" ==========
+" == Test ==
+" ==========
+
 let test#strategy = "vimux"
 
-nmap <silent> <C-n> :TestNearest<CR>
-nmap <silent> <C-x> :TestFile<CR>
-"nmap <silent> <C-a> :TestSuite<CR>
-nmap <silent> <C-t> :TestLast<CR>
-"nmap <silent> <leader>g :TestVisit<CR>
 
-"========== Search ==========
-set wildmenu
-set wildmode=longest:full,full
+" =========
+" == YCM ==
+" =========
 
-"========== YCM ============
 set completeopt-=preview
 let g:ycm_autoclose_preview_window_after_insertion = 1
 
-"========== Mini Buff Expl =====
-let g:miniBufExplMapWindowNavVim = 1 
-let g:miniBufExplMapWindowNavArrows = 1 
-let g:miniBufExplMapCTabSwitchBufs = 1 
-let g:miniBufExplModSelTarget = 1 
 
-nmap <Tab> :bn<CR>
-nmap <S-Tab> :bp<CR>
-
-"========== VimWiki ======
+" =============
+" == VimWiki ==
+" =============
 
 let wiki = {}
 let wiki.path = '~/vimwiki/'
 let wiki.nested_syntaxes = {'python': 'python', 'c++': 'cpp', 'c': 'c', 'php': 'php', 'json': 'json'}
 let g:vimwiki_list = [wiki]
 
-"========== Keymap ========
-" Switch Window 
-nnoremap <C-w>Left <C-w>h
-nnoremap <C-w>Down <C-w>j
-nnoremap <C-w>Up <C-w>k
-nnoremap <C-w>Right <C-w>l
 
-nnoremap <C-c> :BD<CR>
-
-let g:move_key_modifier = 'C'
-
-"""""
+" ================
+" == Swap words ==
+" ================
 
 " :call SwapWords({'foo':'bar'})
+"
+" If any of the words contains a /, a delimiter is required as 2nd parameter:
 " :call SwapWords({'foo/bar':'foo/baz'}, '@')
 
 " https://stackoverflow.com/questions/3578549/easiest-way-to-swap-occurrences-of-two-strings-in-vim
