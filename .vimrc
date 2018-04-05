@@ -1,15 +1,15 @@
 "========== Plug =============
-
 call plug#begin('~/.vim/plugged')
-
 
 " Lint
 Plug 'w0rp/ale' "ALE must be loaded before YCM in order not to screw with the completion
 
 " Autocomplete, tags
 Plug 'Valloric/YouCompleteMe', {'do': './install.py --clang-completer'}
-Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
-Plug 'ludovicchabant/vim-gutentags'
+"Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
+Plug 'Isty001/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
+
+"Plug 'ludovicchabant/vim-gutentags'
 "Plug 'shawncplus/phpcomplete.vim'
 
 " Search
@@ -18,9 +18,14 @@ Plug 'junegunn/fzf.vim'
 
 " NERDTree
 Plug 'scrooloose/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
 
 " Color
 Plug 'dracula/vim'
+Plug 'dsalychev/firesparks'
+Plug 'chriskempson/base16-vim'
+Plug 'morhetz/gruvbox'
+Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
 
 " UI
 Plug 'qpkorr/vim-bufkill'
@@ -41,6 +46,8 @@ Plug 'thiagoalessio/rainbow_levels.vim'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
+Plug 'machakann/vim-highlightedyank'
+Plug 'chaoren/vim-wordmotion'
 
 " PHP
 Plug 'docteurklein/php-getter-setter.vim'
@@ -50,10 +57,15 @@ Plug 'arnaud-lb/vim-php-namespace'
 Plug 'tobyS/vmustache'
 Plug 'tobyS/pdv'
 
+"Ruby
+Plug 'vim-ruby/vim-ruby'
+
 " Git
 Plug 'tpope/vim-fugitive'
-Plug 'airblade/vim-gitgutter'
+Plug 'mhinz/vim-signify'
+Plug 'iberianpig/tig-explorer.vim'
 Plug 'kablamo/vim-git-log'
+Plug 'sodapopcan/vim-twiggy'
 
 " Build & Test
 Plug 'janko-m/vim-test'
@@ -69,40 +81,50 @@ Plug 'johngrib/vim-game-snake'
 call plug#end()
 
 
+"===========
+" == Lint ==
+" ==========
+
+let g:ycm_filter_diagnostics = {
+  \ "c": {
+  \      "regex": [
+  \         "function definition is not allowed here",
+  \         "use of undeclared identifier '__fn__'",
+  \        "operand of type 'void'"
+  \      ],
+  \    }
+  \ }
+
 " ============
 " == Keymap ==
 " ============
 
-let mapleader=" "
+let mapleader = "\<Space>"
+
+" Delete word after cursor
+imap <C-b> <C-[>diwi
 
 " == Search
-nmap <C-g> :NERDTreeFind<CR><C-W>Right<CR>
-map <Leader>m :FZF<CR>
+nmap <leader>g :NERDTreeFind<CR><C-w>l<CR>
+map <leader>f :FZF<CR>
+map <leader>a :Ag<CR>
 
 " == Windows
-nnoremap <C-w>Left <C-w>h
-nnoremap <C-w>Down <C-w>j
-nnoremap <C-w>Up <C-w>k
-nnoremap <C-w>Right <C-w>l
-
 nnoremap <C-c> :BD<CR>
 
-" == Line moving
+map <C-h> <C-W>h
+map <C-l> <C-W>l
+
+" == Line/Selection moving
 let g:move_key_modifier = 'C'
 
-" == Word motion
-let g:camelchar = "A-Z0-9.,;:{([`'\""
-
-nnoremap <silent><C-Left> :<C-u>call search('\C\<\<Bar>\%(^\<Bar>[^'.g:camelchar.']\@<=\)['.g:camelchar.']\<Bar>['.g:camelchar.']\ze\%([^'.g:camelchar.']\&\>\@!\)\<Bar>\%^','bW')<CR>
-nnoremap <silent><C-Right> :<C-u>call search('\C\<\<Bar>\%(^\<Bar>[^'.g:camelchar.']\@<=\)['.g:camelchar.']\<Bar>['.g:camelchar.']\ze\%([^'.g:camelchar.']\&\>\@!\)\<Bar>\%$','W')<CR>
-inoremap <silent><C-Left> <C-o>:call search('\C\<\<Bar>\%(^\<Bar>[^'.g:camelchar.']\@<=\)['.g:camelchar.']\<Bar>['.g:camelchar.']\ze\%([^'.g:camelchar.']\&\>\@!\)\<Bar>\%^','bW')<CR>
-inoremap <silent><C-Right> <C-o>:call search('\C\<\<Bar>\%(^\<Bar>[^'.g:camelchar.']\@<=\)['.g:camelchar.']\<Bar>['.g:camelchar.']\ze\%([^'.g:camelchar.']\&\>\@!\)\<Bar>\%$','W')<CR>
-vnoremap <silent><C-Left> :<C-U>call search('\C\<\<Bar>\%(^\<Bar>[^'.g:camelchar.']\@<=\)['.g:camelchar.']\<Bar>['.g:camelchar.']\ze\%([^'.g:camelchar.']\&\>\@!\)\<Bar>\%^','bW')<CR>v`>o
-vnoremap <silent><C-Right> <Esc>`>:<C-U>call search('\C\<\<Bar>\%(^\<Bar>[^'.g:camelchar.']\@<=\)['.g:camelchar.']\<Bar>['.g:camelchar.']\ze\%([^'.g:camelchar.']\&\>\@!\)\<Bar>\%$','W')<CR>v`<o
-
-" ==Navigate between tabs
+" == Navigate between tabs
 nmap <Tab> :bn<CR>
 nmap <S-Tab> :bp<CR>
+
+" == Indent in viusal mode, reselect text
+vnoremap < <gv
+vnoremap > >gv
 
 " == Test runner
 nmap <silent> <C-n> :TestNearest<CR>
@@ -112,21 +134,30 @@ nmap <silent> <C-t> :TestLast<CR>
 "nmap <silent> <leader>g :TestVisit<CR>
 
 " == History
-nnoremap <C-h> :UndotreeToggle<cr>
+nnoremap <leader>h :UndotreeToggle<cr>
 
 " == Indentation highlight
 map <leader>l :RainbowLevelsToggle<cr>
 
-" == Navigation
+" == Navigation between symbols
 autocmd FileType *c* nnoremap <buffer> <C-y> :YcmCompleter GoTo<CR>
 
+" == Navigation in popup menu
+inoremap <expr> <C-j> pumvisible() ? "\<C-N>" : "j"
+inoremap <expr> <C-k> pumvisible() ? "\<C-P>" : "k"
+
 " == Use PHP class under cursor
-autocmd FileType php inoremap <C-u> <Esc>:call IPhpInsertUse()<CR>
-autocmd FileType php noremap <C-u> :call PhpInsertUse()<CR>
+autocmd FileType php inoremap <leader>u <Esc>:call IPhpInsertUse()<CR>
+autocmd FileType php noremap <leader>u :call PhpInsertUse()<CR>
 
 " == PHP doc
-nnoremap <buffer> <leader>d :call pdv#DocumentWithSnip()<CR>
+nnoremap <leader>pd :call pdv#DocumentWithSnip()<CR>
 
+" == Snippets
+let g:UltiSnipsExpandTrigger="<C-d>"
+
+" == Git
+nnoremap <Leader>t :TigOpenCurrentFile<CR>
 
 " ==========
 " == TMUX ==
@@ -144,6 +175,9 @@ if &term =~ '^screen'
     execute "set <xDown>=\e[1;*B"
     execute "set <xRight>=\e[1;*C"
     execute "set <xLeft>=\e[1;*D"
+
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 endif
 
 
@@ -154,9 +188,12 @@ endif
 syntax on
 filetype plugin indent on
 
-set background=dark
-colorscheme dracula
+set termguicolors
+set t_Co=256
 
+set background=dark
+
+color challenger_deep
 
 " ==================
 " == VIM SETTINGS ==
@@ -167,9 +204,8 @@ silent! so .vimlocal
 
 set nocompatible
 set encoding=utf8
-set t_Co=256
 
-set history=300
+set history=600
 
 set ttyfast
 set nocursorline
@@ -195,6 +231,8 @@ set norelativenumber
 set nowrap
 set mouse=a
 
+set nrformats+=alpha
+
 " == Use the system clipboard
 set clipboard=unnamedplus
 
@@ -205,8 +243,7 @@ set directory^=$HOME/.vim/tmp//
 set undofile
 set undodir=$HOME/.vim/tmp//
 
-
-" ==============
+ " ==============
 " == AutoSave ==
 " ==============
 
@@ -246,6 +283,12 @@ let g:php_namespace_sort_after_insert = 1
 " == Doc generation
 let g:pdv_template_dir = $HOME ."/.vim/plugged/pdv/templates_snip"
 
+" ==========
+" == Ruby ==
+" ==========
+autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
+autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
+autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
 
 " ====================
 " == Tag generation ==
@@ -297,6 +340,8 @@ command! -bang -nargs=* Ag
     \   <bang>0
     \ )
 
+
+let g:EasyGrepRecursive=1
 
 " =========
 " == MRU ==
