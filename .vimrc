@@ -6,11 +6,9 @@ Plug 'w0rp/ale' "ALE must be loaded before YCM in order not to screw with the co
 
 " Autocomplete, tags
 Plug 'Valloric/YouCompleteMe', {'do': './install.py --clang-completer'}
-"Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
-Plug 'Isty001/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
+Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
+"Plug 'Isty001/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
 
-"Plug 'ludovicchabant/vim-gutentags'
-"Plug 'shawncplus/phpcomplete.vim'
 
 " Search
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -18,14 +16,13 @@ Plug 'junegunn/fzf.vim'
 
 " NERDTree
 Plug 'scrooloose/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
 
 " Color
 Plug 'dracula/vim'
-Plug 'dsalychev/firesparks'
 Plug 'chriskempson/base16-vim'
 Plug 'morhetz/gruvbox'
-Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
+Plug 'sonph/onehalf', {'rtp': 'vim/'}
+Plug 'miconda/lucariox.vim'
 
 " UI
 Plug 'qpkorr/vim-bufkill'
@@ -53,12 +50,16 @@ Plug 'chaoren/vim-wordmotion'
 Plug 'docteurklein/php-getter-setter.vim'
 Plug 'adoy/vim-php-refactoring-toolbox'
 Plug 'arnaud-lb/vim-php-namespace'
+Plug 'stephpy/vim-php-cs-fixer'
 
 Plug 'tobyS/vmustache'
 Plug 'tobyS/pdv'
 
 "Ruby
 Plug 'vim-ruby/vim-ruby'
+
+"Tag
+Plug 'ludovicchabant/vim-gutentags'
 
 " Git
 Plug 'tpope/vim-fugitive'
@@ -101,13 +102,14 @@ let g:ycm_filter_diagnostics = {
 
 let mapleader = "\<Space>"
 
-" Delete word after cursor
+" == Delete word after cursor
 imap <C-b> <C-[>diwi
 
 " == Search
 nmap <leader>g :NERDTreeFind<CR><C-w>l<CR>
 map <leader>f :FZF<CR>
 map <leader>a :Ag<CR>
+vnoremap // y/<C-R>"<CR>
 
 " == Windows
 nnoremap <C-c> :BD<CR>
@@ -147,8 +149,8 @@ inoremap <expr> <C-j> pumvisible() ? "\<C-N>" : "j"
 inoremap <expr> <C-k> pumvisible() ? "\<C-P>" : "k"
 
 " == Use PHP class under cursor
-autocmd FileType php inoremap <leader>u <Esc>:call IPhpInsertUse()<CR>
-autocmd FileType php noremap <leader>u :call PhpInsertUse()<CR>
+autocmd FileType php inoremap <C-u> <Esc>:call IPhpInsertUse()<CR>
+autocmd FileType php noremap <C-u> :call PhpInsertUse()<CR>
 
 " == PHP doc
 nnoremap <leader>pd :call pdv#DocumentWithSnip()<CR>
@@ -193,7 +195,13 @@ set t_Co=256
 
 set background=dark
 
-color challenger_deep
+"color challenger_deep
+color gruvbox
+
+if g:colors_name == "gruvbox"
+    highlight Normal guibg=#020202
+endif
+
 
 " ==================
 " == VIM SETTINGS ==
@@ -243,7 +251,7 @@ set directory^=$HOME/.vim/tmp//
 set undofile
 set undodir=$HOME/.vim/tmp//
 
- " ==============
+" ==============
 " == AutoSave ==
 " ==============
 
@@ -277,6 +285,7 @@ function! IPhpInsertUse()
     call feedkeys('a', 'n')
 endfunction
 
+autocmd FileType php nnoremap <silent><leader>pcf :call PhpCsFixerFixFile()<CR>
 
 let g:php_namespace_sort_after_insert = 1
 
@@ -294,9 +303,11 @@ autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
 " == Tag generation ==
 " ====================
 
-let g:gutentags_project_root = ['src']
+"let g:gutentags_project_root = ['src']
 let g:gutentags_cache_dir = "~/.cache/tags"
+let g:gutentags_ctags_executable_php = "ctags -R --fields=+aimlS --languages=php --PHP-kinds=+cfit-va"
 
+set statusline+=%{gutentags#statusline()}
 
 " =============
 " == Tabline ==
@@ -310,7 +321,7 @@ let g:airline#extensions#tabline#enabled = 1
 " ==============
 
 let NERDTreeShowHidden=1
-let g:NERDTreeWinSize=35
+let g:NERDTreeWinSize=40
 
 if !&diff
     autocmd vimenter * NERDTree
