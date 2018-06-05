@@ -13,6 +13,22 @@ class ${1:`!p snip.rv=snip.basename`}
 }
 endsnippet
 
+snippet interface "Interface declaration template" b
+<?php
+
+namespace ${1:`!p
+relpath = os.path.relpath(path)
+m = re.search(r'[A-Z].+(?=/)', relpath)
+if m:
+	snip.rv = m.group().replace('/', '\\')
+`};
+
+interface ${1:`!p snip.rv=snip.basename`}
+{
+	public function ${2:someFunction}(${3:$param}): ${4:};$5
+}
+endsnippet
+
 snippet pub "Public function" b
 public function ${1:name}(${2:$param}): ${3:}
 {
