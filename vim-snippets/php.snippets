@@ -1,0 +1,58 @@
+snippet class "Class declaration template" b
+<?php
+
+namespace ${1:`!p
+relpath = os.path.relpath(path)
+m = re.search(r'[A-Z].+(?=/)', relpath)
+if m:
+	snip.rv = m.group().replace('/', '\\')
+`};
+
+class ${1:`!p snip.rv=snip.basename`}
+{
+}
+endsnippet
+
+snippet pub "Public function" b
+public function ${1:name}(${2:$param}): ${3:}
+{
+	${4:}
+}
+endsnippet
+
+snippet pro "Protected function" b
+protected function ${1:name}(${2:$param}: ${3:})
+{
+	${VISUAL}${4:}
+}
+endsnippet
+
+snippet pri "Private function" b
+private function ${1:name}(${2:$param}: ${3:})
+{
+	${VISUAL}${4:}
+}
+endsnippet
+
+snippet pubs "Public static function" b
+public static function ${1:name}(${2:$param}: ${3:})
+{
+	${VISUAL}${4:}
+}
+endsnippet
+
+snippet pros "Protected static function" b
+
+protected static function ${1:name}(${2:$param}: ${3:})
+{
+	${VISUAL}${4:}
+}
+endsnippet
+
+snippet pris "Private static function" b
+private static function ${1:name}(${2:$param}: ${3:})
+{
+	${VISUAL}${4:}
+}
+endsnippet
+

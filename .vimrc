@@ -4,7 +4,7 @@ call plug#begin('~/.vim/plugged')
 " Lint
 Plug 'w0rp/ale' "ALE must be loaded before YCM in order not to screw with the completion
 
-" Autocomplete, tags
+" Autocomplete
 Plug 'Valloric/YouCompleteMe', {'do': './install.py --clang-completer'}
 Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
 "Plug 'Isty001/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
@@ -22,7 +22,7 @@ Plug 'dracula/vim'
 Plug 'chriskempson/base16-vim'
 Plug 'morhetz/gruvbox'
 Plug 'sonph/onehalf', {'rtp': 'vim/'}
-Plug 'miconda/lucariox.vim'
+Plug 'kaicataldo/material.vim'
 
 " UI
 Plug 'qpkorr/vim-bufkill'
@@ -45,20 +45,21 @@ Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'machakann/vim-highlightedyank'
 Plug 'chaoren/vim-wordmotion'
+Plug 'ryanoasis/vim-devicons'
 
 " PHP
 Plug 'docteurklein/php-getter-setter.vim'
 Plug 'adoy/vim-php-refactoring-toolbox'
+Plug 'beberlei/vim-php-refactor'
 Plug 'arnaud-lb/vim-php-namespace'
-Plug 'stephpy/vim-php-cs-fixer'
 
 Plug 'tobyS/vmustache'
 Plug 'tobyS/pdv'
 
-"Ruby
+" Ruby
 Plug 'vim-ruby/vim-ruby'
 
-"Tag
+" Tag
 Plug 'ludovicchabant/vim-gutentags'
 
 " Git
@@ -153,10 +154,17 @@ autocmd FileType php inoremap <C-u> <Esc>:call IPhpInsertUse()<CR>
 autocmd FileType php noremap <C-u> :call PhpInsertUse()<CR>
 
 " == PHP doc
-nnoremap <leader>pd :call pdv#DocumentWithSnip()<CR>
+
+nnoremap <leader>r :ALEFix<CR>
+
+let g:ale_fixers = {
+\   'php': ['php_cs_fixer'],
+\}
+
 
 " == Snippets
 let g:UltiSnipsExpandTrigger="<C-d>"
+let g:UltiSnipsSnippetsDir = "~/.vim/ulti-snips"
 
 " == Git
 nnoremap <Leader>t :TigOpenCurrentFile<CR>
@@ -196,23 +204,22 @@ set t_Co=256
 set background=dark
 
 "color challenger_deep
-color gruvbox
+"color gruvbox
+color material
 
-if g:colors_name == "gruvbox"
-    highlight Normal guibg=#020202
+if g:colors_name == "material"
+    highlight Normal guibg=#111010
 endif
-
 
 " ==================
 " == VIM SETTINGS ==
 " ==================
 
-" == Project settings
 silent! so .vimlocal
 
 set nocompatible
 set encoding=utf8
-
+set ignorecase
 set history=600
 
 set ttyfast
@@ -353,6 +360,7 @@ command! -bang -nargs=* Ag
 
 
 let g:EasyGrepRecursive=1
+autocmd vimenter * silent! GrepProgram ag
 
 " =========
 " == MRU ==
