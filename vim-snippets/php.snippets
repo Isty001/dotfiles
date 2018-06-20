@@ -1,14 +1,14 @@
 snippet class "Class declaration template" b
 <?php
 
-namespace ${1:`!p
+namespace `!p
 relpath = os.path.relpath(path)
 m = re.search(r'[A-Z].+(?=/)', relpath)
 if m:
 	snip.rv = m.group().replace('/', '\\')
-`};
+`;
 
-class ${1:`!p snip.rv=snip.basename`}
+class `!p snip.rv=snip.basename`
 {
 }
 endsnippet
@@ -16,16 +16,39 @@ endsnippet
 snippet interface "Interface declaration template" b
 <?php
 
-namespace ${1:`!p
+namespace `!p
 relpath = os.path.relpath(path)
 m = re.search(r'[A-Z].+(?=/)', relpath)
 if m:
 	snip.rv = m.group().replace('/', '\\')
-`};
+`;
 
-interface ${1:`!p snip.rv=snip.basename`}
+interface `!p snip.rv=snip.basename`
 {
 	public function ${2:someFunction}(${3:$param}): ${4:};$5
+}
+endsnippet
+
+snippet testcase6 "class XYZTest extends TestCase { ... }"
+<?php
+
+namespace `!p
+relpath = os.path.relpath(path)
+m = re.search(r'[A-Z].+(?=/)', relpath)
+if m:
+	snip.rv = m.group().replace('/', '\\')
+`;
+
+use PHPUnit\Framework\TestCase;
+
+class `!p
+snip.rv = re.match(r'.*(?=\.)', fn).group()
+` extends TestCase
+{
+	public function test$1()
+	{
+		${0:${VISUAL}}
+	}
 }
 endsnippet
 
@@ -37,21 +60,21 @@ public function ${1:name}(${2:$param}): ${3:}
 endsnippet
 
 snippet pro "Protected function" b
-protected function ${1:name}(${2:$param}: ${3:})
+protected function ${1:name}(${2:$param}): ${3:}
 {
 	${VISUAL}${4:}
 }
 endsnippet
 
 snippet pri "Private function" b
-private function ${1:name}(${2:$param}: ${3:})
+private function ${1:name}(${2:$param}): ${3:}
 {
 	${VISUAL}${4:}
 }
 endsnippet
 
 snippet pubs "Public static function" b
-public static function ${1:name}(${2:$param}: ${3:})
+public static function ${1:name}(${2:$param}): ${3:}
 {
 	${VISUAL}${4:}
 }
@@ -59,14 +82,14 @@ endsnippet
 
 snippet pros "Protected static function" b
 
-protected static function ${1:name}(${2:$param}: ${3:})
+protected static function ${1:name}(${2:$param}): ${3:}
 {
 	${VISUAL}${4:}
 }
 endsnippet
 
 snippet pris "Private static function" b
-private static function ${1:name}(${2:$param}: ${3:})
+private static function ${1:name}(${2:$param}): ${3:}
 {
 	${VISUAL}${4:}
 }
