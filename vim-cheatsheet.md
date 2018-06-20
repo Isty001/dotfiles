@@ -1,10 +1,10 @@
-## Scroll
+#### Scroll
 * Down:                 C-y
 * Up:                   C-e
 * Half screen up:       C-u
 * Half screen down:     C-d
 
-# Delete
+#### Delete
 * Insert:
   * Forward word:  C-d
   * Backward word: C-w
@@ -16,22 +16,22 @@
   * Until next **x**:    dt**x**
   * Line:                dd
 
-# Yank
+#### Yank
 * Current line:     yy
 * Current word:     viwy
 
-# Select
+#### Select
 * Inside bracket:           vi**bracket**
 * Reselect last selection:  gv
 * Line:                     V
 
-# Navigation
+#### Navigation
 * Normal:
   * Go to char:                           <leader><leader>s
   * Move cursor to the middle of screen:  zz
   * Go to matching parenthesis:           %
 
-# Swith Case
+#### Swith Case
 * Normal:
   * Toggle (n) char:      (n)~
   * Toggle current word:  g~iw
@@ -40,7 +40,7 @@
 * Visual:
   * Toggle:  U
 
-# Git
+#### Git
 * Current file Log: :Glog -- % 
   * Commit list:     :copen
 
