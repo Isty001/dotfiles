@@ -6,15 +6,15 @@
 
 # Delete
 * Insert:
-** Forward word:  C-d
-** Backward word: C-w
+  * Forward word:  C-d
+  * Backward word: C-w
 
 * Normal:
-** Forward word:        dw
-** Backward word:       dvb
-** Between bracket:     di**bracket**
-** Until next **x**:    dt**x**
-** Line:                dd
+  * Forward word:        dw
+  * Backward word:       dvb
+  * Between bracket:     di**bracket**
+  * Until next **x**:    dt**x**
+  * Line:                dd
 
 # Yank
 * Current line:     yy
@@ -27,20 +27,20 @@
 
 # Navigation
 * Normal:
-** Go to char:                           <leader><leader>s
-** Move cursor to the middle of screen:  zz
-** Go to matching parenthesis:           %
+  * Go to char:                           <leader><leader>s
+  * Move cursor to the middle of screen:  zz
+  * Go to matching parenthesis:           %
 
 # Swith Case
 * Normal:
-** Toggle (n) char:      (n)~
-** Toggle current word:  g~iw
-** Toggle line:          g~~
+  * Toggle (n) char:      (n)~
+  * Toggle current word:  g~iw
+  * Toggle line:          g~~
 
 * Visual:
-** Toggle:  U
+  * Toggle:  U
 
 # Git
 * Current file Log: :Glog -- % 
-** Commit list:     :copen
+  * Commit list:     :copen
 
