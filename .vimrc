@@ -18,16 +18,12 @@ Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
 
 " Color
-Plug 'dracula/vim'
-Plug 'chriskempson/base16-vim'
-Plug 'morhetz/gruvbox'
-Plug 'sonph/onehalf', {'rtp': 'vim/'}
 Plug 'kaicataldo/material.vim'
+Plug 'skreek/skeletor.vim'
 
 " UI
 Plug 'qpkorr/vim-bufkill'
 Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 
 "History
 Plug 'yegappan/mru'
@@ -44,17 +40,16 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'machakann/vim-highlightedyank'
-Plug 'chaoren/vim-wordmotion'
-Plug 'ryanoasis/vim-devicons'
+Plug 'tpope/vim-commentary'
+Plug 'easymotion/vim-easymotion'
+Plug 'romainl/vim-cool' " Disables highlight after finishing search
+Plug 'yuttie/comfortable-motion.vim'
 
 " PHP
 Plug 'docteurklein/php-getter-setter.vim'
 Plug 'adoy/vim-php-refactoring-toolbox'
 Plug 'beberlei/vim-php-refactor'
 Plug 'arnaud-lb/vim-php-namespace'
-
-Plug 'tobyS/vmustache'
-Plug 'tobyS/pdv'
 
 " Ruby
 Plug 'vim-ruby/vim-ruby'
@@ -65,22 +60,24 @@ Plug 'ludovicchabant/vim-gutentags'
 " Git
 Plug 'tpope/vim-fugitive'
 Plug 'mhinz/vim-signify'
-Plug 'iberianpig/tig-explorer.vim'
-Plug 'kablamo/vim-git-log'
-Plug 'sodapopcan/vim-twiggy'
 
 " Build & Test
 Plug 'janko-m/vim-test'
 Plug 'benmills/vimux'
 
-" Notes
-Plug 'vimwiki/vimwiki'
-
 " Game
 Plug 'johngrib/vim-game-code-break'
 Plug 'johngrib/vim-game-snake'
+Plug 'uguu-org/vim-matrix-screensaver'
+Plug 'vim-scripts/TeTrIs.vim'
+
+" Lang
+Plug 'sheerun/vim-polyglot'
 
 call plug#end()
+
+let g:comfortable_motion_friction = 0.0
+let g:comfortable_motion_air_drag = 7.0
 
 
 "===========
@@ -101,10 +98,20 @@ let g:ycm_filter_diagnostics = {
 " == Keymap ==
 " ============
 
+""" Files not folded by default
+
+let anyfold_activate=1
+let anyfold_fold_comments=1
+
+" Don't fold by default
+set foldlevel=100
+
+
+
 let mapleader = "\<Space>"
 
-" == Delete word after cursor
-imap <C-b> <C-[>diwi
+" == Delete newxt word
+imap <C-d> <C-[>dvb
 
 " == Search
 nmap <leader>g :NERDTreeFind<CR><C-w>l<CR>
@@ -150,8 +157,8 @@ inoremap <expr> <C-j> pumvisible() ? "\<C-N>" : "j"
 inoremap <expr> <C-k> pumvisible() ? "\<C-P>" : "k"
 
 " == Use PHP class under cursor
-autocmd FileType php inoremap <C-u> <Esc>:call IPhpInsertUse()<CR>
-autocmd FileType php noremap <C-u> :call PhpInsertUse()<CR>
+autocmd FileType php inoremap <C-p> <Esc>:call IPhpInsertUse()<CR>
+autocmd FileType php noremap <C-p> :call PhpInsertUse()<CR>
 
 " == PHP doc
 
@@ -161,6 +168,7 @@ let g:ale_fixers = {
 \   'php': ['php_cs_fixer'],
 \}
 
+let g:ale_sign_column_always=1
 
 " == Snippets
 let g:UltiSnipsExpandTrigger="<C-d>"
@@ -203,8 +211,6 @@ set t_Co=256
 
 set background=dark
 
-"color challenger_deep
-"color gruvbox
 color material
 
 if g:colors_name == "material"
