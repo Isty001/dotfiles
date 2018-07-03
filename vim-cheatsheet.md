@@ -6,19 +6,25 @@
 
 #### Delete
 * Insert:
-  * Forward word:  C-d
+  * Forward word:  C-b
   * Backward word: C-w
 
 * Normal:
+  * Forward char:        x
+  * Prev char:           X
   * Forward word:        dw
   * Backward word:       dvb
   * Between bracket:     di**bracket**
-  * Until next **x**:    dt**x**
+  * Until next **x**:    d(t/T)**x**
   * Line:                dd
 
 #### Yank
-* Current line:     yy
-* Current word:     viwy
+* Current line:             yy
+* Current word:             viwy
+* Between ' exclusive:      yi'
+* Between ' inclusive:      ya'
+* Until , excl.:            yt'
+* Until, incl.:             yf'
 
 #### Select
 * Inside bracket:           vi**bracket**
