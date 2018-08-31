@@ -1,14 +1,16 @@
 "========== Plug =============
 call plug#begin('~/.vim/plugged')
 
-" Lint
-Plug 'w0rp/ale' "ALE must be loaded before YCM in order not to screw with the completion
+ "ALE must be loaded before YCM in order not to screw with the completion
+Plug 'Isty001/ale'
+
+" YCM will handle this very well
+autocmd FileType c,cpp :ALEDisable
 
 " Autocomplete
 Plug 'Valloric/YouCompleteMe', {'do': './install.py --clang-completer'}
-Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
-"Plug 'Isty001/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
-
+" Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
+Plug 'Isty001/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
 
 " Search
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -19,7 +21,13 @@ Plug 'scrooloose/nerdtree'
 
 " Color
 Plug 'kaicataldo/material.vim'
-Plug 'skreek/skeletor.vim'
+Plug 'KeitaNakamura/neodark.vim'
+Plug 'ayu-theme/ayu-vim'
+
+" Tags
+if &ft != 'c' || &ft != 'cpp'
+    Plug 'ludovicchabant/vim-gutentags'
+endif
 
 " UI
 Plug 'qpkorr/vim-bufkill'
@@ -37,25 +45,40 @@ Plug 'dkprice/vim-easygrep'
 Plug 'matze/vim-move'
 Plug 'thiagoalessio/rainbow_levels.vim'
 Plug 'editorconfig/editorconfig-vim'
+
+Plug 'RRethy/vim-illuminate'
+let g:Illuminate_delay = 100
+
 Plug 'SirVer/ultisnips'
+
 Plug 'honza/vim-snippets'
 Plug 'machakann/vim-highlightedyank'
 Plug 'tpope/vim-commentary'
 Plug 'easymotion/vim-easymotion'
+Plug 'rhysd/clever-f.vim'
 Plug 'romainl/vim-cool' " Disables highlight after finishing search
-Plug 'yuttie/comfortable-motion.vim'
+Plug 'tpope/vim-endwise'
+Plug 'kevinhui/vim-docker-tools'
+Plug 'alvan/vim-closetag'
+
+let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.php.html,*.xml'
+
+autocmd BufNewFile,BufRead *.html.php set ft=php.html
+
+Plug 'tpope/vim-abolish'
+Plug 'google/vim-searchindex'
 
 " PHP
-Plug 'docteurklein/php-getter-setter.vim'
-Plug 'adoy/vim-php-refactoring-toolbox'
-Plug 'beberlei/vim-php-refactor'
-Plug 'arnaud-lb/vim-php-namespace'
+Plug 'docteurklein/php-getter-setter.vim', {'for': 'php'}
+Plug 'adoy/vim-php-refactoring-toolbox', {'for': 'php'}
+Plug 'beberlei/vim-php-refactor', {'for': 'php'}
+Plug 'arnaud-lb/vim-php-namespace', {'for': 'php'}
 
 " Ruby
-Plug 'vim-ruby/vim-ruby'
+Plug 'vim-ruby/vim-ruby', {'for': 'ruby'}
+" Plug 'Isty001/vim-ruby', {'for': 'ruby'}
 
 " Tag
-Plug 'ludovicchabant/vim-gutentags'
 
 " Git
 Plug 'tpope/vim-fugitive'
@@ -72,12 +95,12 @@ Plug 'uguu-org/vim-matrix-screensaver'
 Plug 'vim-scripts/TeTrIs.vim'
 
 " Lang
-Plug 'sheerun/vim-polyglot'
+" Plug 'sheerun/vim-polyglot'
 
 call plug#end()
 
 let g:comfortable_motion_friction = 0.0
-let g:comfortable_motion_air_drag = 7.0
+let g:comfortable_motion_air_drag = 4.0
 
 
 "===========
@@ -98,20 +121,12 @@ let g:ycm_filter_diagnostics = {
 " == Keymap ==
 " ============
 
-""" Files not folded by default
-
-let anyfold_activate=1
-let anyfold_fold_comments=1
-
-" Don't fold by default
-set foldlevel=100
-
 
 
 let mapleader = "\<Space>"
 
 " == Delete newxt word
-imap <C-d> <C-[>dvb
+imap <C-b> <C-[>dvb
 
 " == Search
 nmap <leader>g :NERDTreeFind<CR><C-w>l<CR>
@@ -160,7 +175,13 @@ inoremap <expr> <C-k> pumvisible() ? "\<C-P>" : "k"
 autocmd FileType php inoremap <C-p> <Esc>:call IPhpInsertUse()<CR>
 autocmd FileType php noremap <C-p> :call PhpInsertUse()<CR>
 
-" == PHP doc
+" Always delete to black hole
+nnoremap d "_d
+vnoremap d "_d
+
+" Navigate in command mode
+cnoremap <C-K> <Up>
+cnoremap <C-J> <Down>
 
 nnoremap <leader>r :ALEFix<CR>
 
@@ -173,9 +194,8 @@ let g:ale_sign_column_always=1
 " == Snippets
 let g:UltiSnipsExpandTrigger="<C-d>"
 let g:UltiSnipsSnippetsDir = "~/.vim/ulti-snips"
-
-" == Git
-nnoremap <Leader>t :TigOpenCurrentFile<CR>
+let g:UltiSnipsJumpForwardTrigger="<C-l>"
+let g:UltiSnipsJumpBackwardTrigger="<C-h>"
 
 " ==========
 " == TMUX ==
@@ -209,19 +229,19 @@ filetype plugin indent on
 set termguicolors
 set t_Co=256
 
-set background=dark
+" set background=dark
 
+" let ayucolor="dark"
 color material
 
 if g:colors_name == "material"
-    highlight Normal guibg=#111010
+  highlight Normal guibg=#111010
 endif
 
 " ==================
 " == VIM SETTINGS ==
 " ==================
 
-silent! so .vimlocal
 
 set nocompatible
 set encoding=utf8
@@ -248,6 +268,8 @@ set expandtab
 
 set nu
 set norelativenumber
+
+set nofoldenable
 
 set nowrap
 set mouse=a
@@ -276,17 +298,17 @@ let g:auto_save_in_insert_mode = 0
 " == Hightlight word under cursor ==
 " ==================================
 
-set updatetime=10
+" set updatetime=10
 
-function! HighlightWordUnderCursor()
-    if bufname("%") !~ '^NERD' && getline(".")[col(".")-1] !~# '[[:punct:][:blank:]]'
-        exec 'match' 'Search' '/\V\<'.expand('<cword>').'\>/'
-    else
-        match none
-    endif
-endfunction
+" function! HighlightWordUnderCursor()
+"     if bufname("%") !~ '^NERD' && getline(".")[col(".")-1] !~# '[[:punct:][:blank:]]'
+"         exec 'match' 'Search' '/\V\<'.expand('<cword>').'\>/'
+"     else
+"         match none
+"     endif
+" endfunction
 
-autocmd! CursorHold,CursorHoldI * call HighlightWordUnderCursor()
+" autocmd! CursorHold,CursorHoldI * call HighlightWordUnderCursor()
 
 
 " =========
@@ -311,6 +333,8 @@ let g:pdv_template_dir = $HOME ."/.vim/plugged/pdv/templates_snip"
 autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
 autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
 autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
+autocmd FileType ruby,eruby set ai sw=2 sts=2 et
+
 
 " ====================
 " == Tag generation ==
@@ -364,7 +388,7 @@ command! -bang -nargs=* Ag
     \   <bang>0
     \ )
 
-
+" Replace
 let g:EasyGrepRecursive=1
 autocmd vimenter * silent! GrepProgram ag
 
@@ -451,4 +475,7 @@ function! SwapWords(dict, ...)
         \ . '\=' . string(Mirror(a:dict)) . '[S(0)]'
         \ . delimiter . 'g'
 endfunction
+
+" Project settings
+silent! so .vimlocal
 

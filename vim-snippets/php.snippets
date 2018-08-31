@@ -13,6 +13,21 @@ class `!p snip.rv=snip.basename`
 }
 endsnippet
 
+snippet trait "Trait declaration template" b
+<?php
+
+namespace ${1:`!p
+relpath = os.path.relpath(path)
+m = re.search(r'[A-Z].+(?=/)', relpath)
+if m:
+	snip.rv = m.group().replace('/', '\\')
+`};
+
+trait ${1:`!p snip.rv=snip.basename`}
+{
+}
+endsnippet
+
 snippet interface "Interface declaration template" b
 <?php
 

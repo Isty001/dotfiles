@@ -1,0 +1,6 @@
+let g:php_autoloader_file = ''
+let g:phpcd_autoload_path = let g:php_autoloader_file
+
+let g:phpcd_php_cli_executable = 'php7.1'
+
+let test#php#phpunit#executable = 'phpunit-7-1-5'
