@@ -381,18 +381,14 @@ endif
 " == Search FZF/AG ==
 " ===================
 
-let s:ag_options = ' --skip-vcs-ignores --path-to-ignore=.vim-ignore'
+function! s:ag_with_opts(arg, bang)
+  let tokens  = split(a:arg)
+  let ag_opts = join(filter(copy(tokens), 'v:val =~ "^-"')) . ' --skip-vcs-ignores --path-to-ignore=.vim-ignore'
+  let query   = join(filter(copy(tokens), 'v:val !~ "^-"'))
+  call fzf#vim#ag(query, ag_opts, a:bang ? {} : {'down': '40%'})
+endfunction
 
-let $FZF_DEFAULT_COMMAND = 'ag -g ""' . s:ag_options
-
-command! -bang -nargs=* Ag
-    \ call fzf#vim#ag(
-    \   <q-args>,
-    \   s:ag_options,
-    \  <bang>0 ? fzf#vim#with_preview('up:60%')
-    \        : fzf#vim#with_preview('right:50%:hidden', '?'),
-    \   <bang>0
-    \ )
+autocmd VimEnter * command! -nargs=* -bang Ag call s:ag_with_opts(<q-args>, <bang>0)
 
 " Replace
 let g:EasyGrepRecursive=1
