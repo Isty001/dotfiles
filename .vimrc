@@ -9,8 +9,8 @@ autocmd FileType c,cpp :ALEDisable
 
 " Autocomplete
 Plug 'Valloric/YouCompleteMe', {'do': './install.py --clang-completer'}
-" Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
-Plug 'Isty001/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
+Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
+" Plug 'Isty001/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
 
 " Search
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -21,8 +21,6 @@ Plug 'scrooloose/nerdtree'
 
 " Color
 Plug 'kaicataldo/material.vim'
-Plug 'KeitaNakamura/neodark.vim'
-Plug 'ayu-theme/ayu-vim'
 
 " Tags
 if &ft != 'c' || &ft != 'cpp'
@@ -67,6 +65,7 @@ autocmd BufNewFile,BufRead *.html.php set ft=php.html
 
 Plug 'tpope/vim-abolish'
 Plug 'google/vim-searchindex'
+" Plug 'stephpy/vim-yaml'
 
 " PHP
 Plug 'docteurklein/php-getter-setter.vim', {'for': 'php'}
@@ -86,7 +85,19 @@ Plug 'mhinz/vim-signify'
 
 " Build & Test
 Plug 'janko-m/vim-test'
+
+let test#strategy = "vimux"
+
+nmap <silent> <C-n> :TestNearest<CR>
+nmap <silent> <C-x> :TestFile<CR>
+nmap <silent> <C-t> :TestLast<CR>
+
+
 Plug 'benmills/vimux'
+
+nnoremap <leader>x :VimuxRunLastCommand<cr>
+autocmd FileType *c* map <C-x> :call VimuxRunCommand("make test")<CR>
+
 
 " Game
 Plug 'johngrib/vim-game-code-break'
@@ -150,13 +161,6 @@ nmap <S-Tab> :bp<CR>
 " == Indent in viusal mode, reselect text
 vnoremap < <gv
 vnoremap > >gv
-
-" == Test runner
-nmap <silent> <C-n> :TestNearest<CR>
-nmap <silent> <C-x> :TestFile<CR>
-nmap <silent> <C-t> :TestLast<CR>
-"nmap <silent> <C-a> :TestSuite<CR>
-"nmap <silent> <leader>g :TestVisit<CR>
 
 " == History
 nnoremap <leader>h :UndotreeToggle<cr>
@@ -250,6 +254,8 @@ set history=600
 
 set ttyfast
 set nocursorline
+
+autocmd BufNewFile,BufRead *.html.php   set ft=php
 
 "This makes the autocomplete dropdown flashing and slowish :-(
 "set lazyredraw
@@ -414,12 +420,6 @@ let g:undotree_SplitWidth = 40
 " == Height
 let g:undotree_DiffpanelHeight = 20
 
-
-" ==========
-" == Test ==
-" ==========
-
-let test#strategy = "vimux"
 
 
 " =========
