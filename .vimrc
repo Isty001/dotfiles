@@ -1,3 +1,6 @@
+let mapleader = "\<Space>"
+
+
 "========== Plug =============
 call plug#begin('~/.vim/plugged')
 
@@ -24,8 +27,8 @@ Plug 'kaicataldo/material.vim'
 
 " Tags
 if &ft != 'c' || &ft != 'cpp'
-    Plug 'ludovicchabant/vim-gutentags'
 endif
+Plug 'ludovicchabant/vim-gutentags'
 
 " UI
 Plug 'qpkorr/vim-bufkill'
@@ -65,6 +68,12 @@ autocmd BufNewFile,BufRead *.html.php set ft=php.html
 
 Plug 'tpope/vim-abolish'
 Plug 'google/vim-searchindex'
+
+Plug 'itchyny/calendar.vim'
+
+let g:calendar_google_calendar = 1
+let g:calendar_google_task = 1
+
 " Plug 'stephpy/vim-yaml'
 
 " PHP
@@ -76,8 +85,6 @@ Plug 'arnaud-lb/vim-php-namespace', {'for': 'php'}
 " Ruby
 Plug 'vim-ruby/vim-ruby', {'for': 'ruby'}
 " Plug 'Isty001/vim-ruby', {'for': 'ruby'}
-
-" Tag
 
 " Git
 Plug 'tpope/vim-fugitive'
@@ -95,7 +102,7 @@ nmap <silent> <C-t> :TestLast<CR>
 
 Plug 'benmills/vimux'
 
-nnoremap <leader>x :VimuxRunLastCommand<cr>
+map <leader>x :VimuxRunLastCommand<cr>
 autocmd FileType *c* map <C-x> :call VimuxRunCommand("make test")<CR>
 
 
@@ -133,9 +140,6 @@ let g:ycm_filter_diagnostics = {
 " ============
 
 
-
-let mapleader = "\<Space>"
-
 " == Delete newxt word
 imap <C-b> <C-[>dvb
 
@@ -169,7 +173,8 @@ nnoremap <leader>h :UndotreeToggle<cr>
 map <leader>l :RainbowLevelsToggle<cr>
 
 " == Navigation between symbols
-autocmd FileType *c* nnoremap <buffer> <C-y> :YcmCompleter GoTo<CR>
+autocmd FileType *c* nnoremap <buffer> <C-y> :YcmCompleter GoToDeclaration<CR>
+" autocmd FileType *c* nnoremap <buffer> <C-]> :YcmCompleter GoToDefinition<CR>
 
 " == Navigation in popup menu
 inoremap <expr> <C-j> pumvisible() ? "\<C-N>" : "j"
@@ -262,6 +267,10 @@ autocmd BufNewFile,BufRead *.html.php   set ft=php
 
 set hlsearch
 
+set wildmenu
+set wildignorecase
+set wildmode=full
+
 set list
 set listchars=tab:>-,trail:.,extends:>,precedes:<
 set backspace=indent,eol,start
@@ -272,8 +281,10 @@ set shiftwidth=4
 set softtabstop=4
 set expandtab
 
+
 set nu
 set norelativenumber
+set cursorline
 
 set nofoldenable
 
@@ -380,6 +391,9 @@ endif
 " ===================
 " == Search FZF/AG ==
 " ===================
+
+let s:ag_options = ' --skip-vcs-ignores --path-to-ignore=.vim-ignore'
+let $FZF_DEFAULT_COMMAND = 'ag -g ""' . s:ag_options
 
 function! s:ag_with_opts(arg, bang)
   let tokens  = split(a:arg)
