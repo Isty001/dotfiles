@@ -4,11 +4,15 @@ let mapleader = "\<Space>"
 "========== Plug =============
 call plug#begin('~/.vim/plugged')
 
- "ALE must be loaded before YCM in order not to screw with the completion
+" ---
+"ALE must be loaded before YCM in order not to screw with the completion
+
 Plug 'Isty001/ale'
 
 " YCM will handle this very well
 autocmd FileType c,cpp :ALEDisable
+
+" ---
 
 " Autocomplete
 Plug 'Valloric/YouCompleteMe', {'do': './install.py --clang-completer'}
@@ -24,10 +28,11 @@ Plug 'scrooloose/nerdtree'
 
 " Color
 Plug 'kaicataldo/material.vim'
+Plug 'whatyouhide/vim-gotham'
+Plug 'tyrannicaltoucan/vim-quantum'
+Plug 'semibran/vim-colors-synthetic'
 
 " Tags
-if &ft != 'c' || &ft != 'cpp'
-endif
 Plug 'ludovicchabant/vim-gutentags'
 
 " UI
@@ -41,40 +46,68 @@ Plug 'mbbill/undotree'
 " Editor
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-surround'
+Plug 'machakann/vim-sandwich'
+
+" ---
+
 Plug 'vim-scripts/vim-auto-save'
+
+let g:auto_save = 1
+let g:auto_save_in_insert_mode = 0
+
+" ---
+
 Plug 'dkprice/vim-easygrep'
 Plug 'matze/vim-move'
 Plug 'thiagoalessio/rainbow_levels.vim'
 Plug 'editorconfig/editorconfig-vim'
 
+" ---
+
 Plug 'RRethy/vim-illuminate'
+
+hi link illuminatedWord Visual
 let g:Illuminate_delay = 100
 
-Plug 'SirVer/ultisnips'
+" ---
 
 Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips'
+
+let g:UltiSnipsExpandTrigger="<C-a>"
+let g:UltiSnipsSnippetsDir = "~/.vim/ulti-snips"
+let g:UltiSnipsJumpForwardTrigger="<C-l>"
+let g:UltiSnipsJumpBackwardTrigger="<C-h>"
+
+
 Plug 'machakann/vim-highlightedyank'
 Plug 'tpope/vim-commentary'
 Plug 'easymotion/vim-easymotion'
 Plug 'rhysd/clever-f.vim'
 Plug 'romainl/vim-cool' " Disables highlight after finishing search
 Plug 'tpope/vim-endwise'
-Plug 'kevinhui/vim-docker-tools'
+
+" ---
+
 Plug 'alvan/vim-closetag'
 
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.php.html,*.xml'
 
 autocmd BufNewFile,BufRead *.html.php set ft=php.html
 
+" ---
+
 Plug 'tpope/vim-abolish'
 Plug 'google/vim-searchindex'
 
-Plug 'itchyny/calendar.vim'
+" ---
+
+" Plug 'itchyny/calendar.vim'
 
 let g:calendar_google_calendar = 1
 let g:calendar_google_task = 1
 
-" Plug 'stephpy/vim-yaml'
+" ---
 
 " PHP
 Plug 'docteurklein/php-getter-setter.vim', {'for': 'php'}
@@ -90,20 +123,28 @@ Plug 'vim-ruby/vim-ruby', {'for': 'ruby'}
 Plug 'tpope/vim-fugitive'
 Plug 'mhinz/vim-signify'
 
+" HBS
+Plug 'joukevandermaas/vim-ember-hbs'
+
 " Build & Test
+" ---
+Plug 'benmills/vimux'
+
+map <leader>x :VimuxRunLastCommand<cr>
+autocmd FileType c,cpp map <C-x> :call VimuxRunCommand("make test")<CR>
+
+" ---
+
 Plug 'janko-m/vim-test'
 
 let test#strategy = "vimux"
+
 
 nmap <silent> <C-n> :TestNearest<CR>
 nmap <silent> <C-x> :TestFile<CR>
 nmap <silent> <C-t> :TestLast<CR>
 
-
-Plug 'benmills/vimux'
-
-map <leader>x :VimuxRunLastCommand<cr>
-autocmd FileType *c* map <C-x> :call VimuxRunCommand("make test")<CR>
+" ---
 
 
 " Game
@@ -201,11 +242,6 @@ let g:ale_fixers = {
 let g:ale_sign_column_always=1
 
 " == Snippets
-let g:UltiSnipsExpandTrigger="<C-d>"
-let g:UltiSnipsSnippetsDir = "~/.vim/ulti-snips"
-let g:UltiSnipsJumpForwardTrigger="<C-l>"
-let g:UltiSnipsJumpBackwardTrigger="<C-h>"
-
 " ==========
 " == TMUX ==
 " ==========
@@ -240,11 +276,13 @@ set t_Co=256
 
 " set background=dark
 
-" let ayucolor="dark"
-color material
+let ayucolor="dark"
+" color material
+color gotham
+" color palenight
 
 if g:colors_name == "material"
-  highlight Normal guibg=#111010
+    highlight Normal guibg=#111010
 endif
 
 " ==================
@@ -258,7 +296,6 @@ set ignorecase
 set history=600
 
 set ttyfast
-set nocursorline
 
 autocmd BufNewFile,BufRead *.html.php   set ft=php
 
@@ -266,10 +303,6 @@ autocmd BufNewFile,BufRead *.html.php   set ft=php
 "set lazyredraw
 
 set hlsearch
-
-set wildmenu
-set wildignorecase
-set wildmode=full
 
 set list
 set listchars=tab:>-,trail:.,extends:>,precedes:<
@@ -283,7 +316,7 @@ set expandtab
 
 
 set nu
-set norelativenumber
+set relativenumber
 set cursorline
 
 set nofoldenable
@@ -302,30 +335,6 @@ set directory^=$HOME/.vim/tmp//
 
 set undofile
 set undodir=$HOME/.vim/tmp//
-
-" ==============
-" == AutoSave ==
-" ==============
-
-let g:auto_save = 1
-let g:auto_save_in_insert_mode = 0
-
-
-" ==================================
-" == Hightlight word under cursor ==
-" ==================================
-
-" set updatetime=10
-
-" function! HighlightWordUnderCursor()
-"     if bufname("%") !~ '^NERD' && getline(".")[col(".")-1] !~# '[[:punct:][:blank:]]'
-"         exec 'match' 'Search' '/\V\<'.expand('<cword>').'\>/'
-"     else
-"         match none
-"     endif
-" endfunction
-
-" autocmd! CursorHold,CursorHoldI * call HighlightWordUnderCursor()
 
 
 " =========
@@ -397,12 +406,28 @@ let $FZF_DEFAULT_COMMAND = 'ag -g ""' . s:ag_options
 
 function! s:ag_with_opts(arg, bang)
   let tokens  = split(a:arg)
-  let ag_opts = join(filter(copy(tokens), 'v:val =~ "^-"')) . ' --skip-vcs-ignores --path-to-ignore=.vim-ignore'
+  let ag_opts = join(filter(copy(tokens), 'v:val =~ "^-"')) . ' --skip-vcs-ignores --path-to-ignore=.vim-ignore --color --color-path="0;38;5;24" --color-line-number="0" --color-match="1;33"'
   let query   = join(filter(copy(tokens), 'v:val !~ "^-"'))
   call fzf#vim#ag(query, ag_opts, a:bang ? {} : {'down': '40%'})
 endfunction
 
 autocmd VimEnter * command! -nargs=* -bang Ag call s:ag_with_opts(<q-args>, <bang>0)
+
+" FZF colors
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
 
 " Replace
 let g:EasyGrepRecursive=1
