@@ -60,7 +60,7 @@ plugins=(git debian symfony2 history)
 
 # User configuration
 
-export PATH="~/.rvm/gems/ruby-2.3.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:$HOME/.cargo/bin:$HOME/.cabal/bin"
+export PATH="~/.rvm/gems/ruby-2.3.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:$HOME/.cargo/bin:$HOME/.cabal/bin:$HOME/.local/bin"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
@@ -107,6 +107,7 @@ export LESS_TERMCAP_mh=$(tput dim)
 
 alias json="jq -C '.' | less -R"
 alias html="lynx -stdin"
+alias python="python3"
 
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 
@@ -124,3 +125,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
 
 
 source ~/.rvm/scripts/rvm
+
+export NVM_DIR=~/.nvm
+source ~/.nvm/nvm.sh
+
