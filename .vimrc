@@ -29,8 +29,7 @@ Plug 'scrooloose/nerdtree'
 " Color
 Plug 'kaicataldo/material.vim'
 Plug 'whatyouhide/vim-gotham'
-Plug 'tyrannicaltoucan/vim-quantum'
-Plug 'semibran/vim-colors-synthetic'
+Plug 'connorholyday/vim-snazzy'
 
 " Tags
 Plug 'ludovicchabant/vim-gutentags'
@@ -278,11 +277,10 @@ set t_Co=256
 
 let ayucolor="dark"
 " color material
-color gotham
-" color palenight
+color snazzy
 
-if g:colors_name == "material"
-    highlight Normal guibg=#111010
+if g:colors_name == "snazzy"
+    highlight Normal guibg=#180C26
 endif
 
 " ==================
