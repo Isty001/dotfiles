@@ -12,13 +12,26 @@ Plug 'Isty001/ale'
 " YCM will handle this very well
 autocmd FileType c,cpp :ALEDisable
 
+let g:php_phpstan_configuration = '--autoload-file=' . get(g:, 'php_autoloader_file')
+
 " ---
 
 " Autocomplete
 Plug 'Valloric/YouCompleteMe', {'do': './install.py --clang-completer'}
+
+" Plug 'autozimu/LanguageClient-neovim', {
+"     \ 'branch': 'next',
+"     \ 'do': 'bash install.sh',
+"     \ }
+
+" let g:LanguageClient_serverCommands = {
+"     \ 'ruby': [ 'solargraph',  'stdio' ],
+"     \ }
+
 Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
 " Plug 'Isty001/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
-
+" Plug 'roxma/LanguageServer-php-neovim',  {'do': 'composer install && composer run-script parse-stubs'}
+"
 " Search
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -30,13 +43,21 @@ Plug 'scrooloose/nerdtree'
 Plug 'kaicataldo/material.vim'
 Plug 'whatyouhide/vim-gotham'
 Plug 'connorholyday/vim-snazzy'
+Plug 'liuchengxu/space-vim-theme'
+Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
 
 " Tags
 Plug 'ludovicchabant/vim-gutentags'
 
+" ---
+
 " UI
 Plug 'qpkorr/vim-bufkill'
-Plug 'vim-airline/vim-airline'
+
+" ---
+
+Plug 'ap/vim-buftabline'
+
 
 "History
 Plug 'yegappan/mru'
@@ -44,8 +65,9 @@ Plug 'mbbill/undotree'
 
 " Editor
 Plug 'Raimondi/delimitMate'
-Plug 'tpope/vim-surround'
+" Plug 'tpope/vim-surround'
 Plug 'machakann/vim-sandwich'
+Plug 'LandonSchropp/vim-stamp'
 
 " ---
 
@@ -58,7 +80,6 @@ let g:auto_save_in_insert_mode = 0
 
 Plug 'dkprice/vim-easygrep'
 Plug 'matze/vim-move'
-Plug 'thiagoalessio/rainbow_levels.vim'
 Plug 'editorconfig/editorconfig-vim'
 
 " ---
@@ -113,17 +134,24 @@ Plug 'docteurklein/php-getter-setter.vim', {'for': 'php'}
 Plug 'adoy/vim-php-refactoring-toolbox', {'for': 'php'}
 Plug 'beberlei/vim-php-refactor', {'for': 'php'}
 Plug 'arnaud-lb/vim-php-namespace', {'for': 'php'}
+Plug 'aliou/sql-heredoc.vim'
+
+
+" SQL
+Plug 'vim-scripts/dbext.vim', {'for': 'sql'}
 
 " Ruby
-Plug 'vim-ruby/vim-ruby', {'for': 'ruby'}
+" Plug 'vim-ruby/vim-ruby', {'for': 'ruby'}
 " Plug 'Isty001/vim-ruby', {'for': 'ruby'}
+
 
 " Git
 Plug 'tpope/vim-fugitive'
 Plug 'mhinz/vim-signify'
 
-" HBS
-Plug 'joukevandermaas/vim-ember-hbs'
+
+Plug 'joukevandermaas/vim-ember-hbs', {'for': 'html.handlebars'}
+Plug 'jwalton512/vim-blade'
 
 " Build & Test
 " ---
@@ -143,8 +171,8 @@ nmap <silent> <C-n> :TestNearest<CR>
 nmap <silent> <C-x> :TestFile<CR>
 nmap <silent> <C-t> :TestLast<CR>
 
-" ---
 
+" ---
 
 " Game
 Plug 'johngrib/vim-game-code-break'
@@ -157,8 +185,7 @@ Plug 'vim-scripts/TeTrIs.vim'
 
 call plug#end()
 
-let g:comfortable_motion_friction = 0.0
-let g:comfortable_motion_air_drag = 4.0
+runtime macros/matchit.vim
 
 
 "===========
@@ -236,6 +263,7 @@ nnoremap <leader>r :ALEFix<CR>
 
 let g:ale_fixers = {
 \   'php': ['php_cs_fixer'],
+\   'c': ['clang-format#']
 \}
 
 let g:ale_sign_column_always=1
@@ -273,11 +301,14 @@ filetype plugin indent on
 set termguicolors
 set t_Co=256
 
-" set background=dark
+set background=dark
 
-let ayucolor="dark"
 " color material
-color snazzy
+" color snazzy
+" color space_vim_theme
+color challenger_deep
+
+
 
 if g:colors_name == "snazzy"
     highlight Normal guibg=#180C26
@@ -369,13 +400,6 @@ let g:gutentags_cache_dir = "~/.cache/tags"
 let g:gutentags_ctags_executable_php = "ctags -R --fields=+aimlS --languages=php --PHP-kinds=+cfit-va"
 
 set statusline+=%{gutentags#statusline()}
-
-" =============
-" == Tabline ==
-" =============
-
-let g:airline#extensions#tabline#enabled = 1
-
 
 " ==============
 " == NERDTree ==

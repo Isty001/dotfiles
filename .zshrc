@@ -115,7 +115,7 @@ export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 export NVM_DIR="~/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
-unalias ag
+# unalias ag
 alias ag='ag --skip-vcs-ignores'
 
 export EDITOR=vim
@@ -129,3 +129,5 @@ source ~/.rvm/scripts/rvm
 export NVM_DIR=~/.nvm
 source ~/.nvm/nvm.sh
 
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
