@@ -1,0 +1,3 @@
+{
+    "intelephense.files.exclude": ["**/cache/**/classes.php"]
+}
