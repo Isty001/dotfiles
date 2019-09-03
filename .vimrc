@@ -9,9 +9,6 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'Isty001/ale'
 
-" YCM will handle this very well
-autocmd FileType c,cpp :ALEDisable
-
 let g:php_phpstan_configuration = '--autoload-file=' . get(g:, 'php_autoloader_file')
 
 " ---
@@ -288,19 +285,6 @@ call plug#end()
 runtime macros/matchit.vim
 " packadd cfilter
 
-"===========
-" == Lint ==
-" ==========
-
-let g:ycm_filter_diagnostics = {
-  \ "c": {
-  \      "regex": [
-  \         "function definition is not allowed here",
-  \         "use of undeclared identifier '__fn__'",
-  \        "operand of type 'void'"
-  \      ],
-  \    }
-  \ }
 
 " ============
 " == Keymap ==
@@ -472,17 +456,6 @@ autocmd FileType php nnoremap <silent><leader>pcf :call PhpCsFixerFixFile()<CR>
 
 let g:php_namespace_sort_after_insert = 1
 
-" == Doc generation
-let g:pdv_template_dir = $HOME ."/.vim/plugged/pdv/templates_snip"
-
-" ==========
-" == Ruby ==
-" ==========
-autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
-autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
-autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
-autocmd FileType ruby,eruby set ai sw=2 sts=2 et
-
 
 " ====================
 " == Tag generation ==
@@ -569,25 +542,6 @@ let g:undotree_SplitWidth = 40
 
 " == Height
 let g:undotree_DiffpanelHeight = 20
-
-
-
-" =========
-" == YCM ==
-" =========
-
-set completeopt-=preview
-let g:ycm_autoclose_preview_window_after_insertion = 1
-
-
-" =============
-" == VimWiki ==
-" =============
-
-let wiki = {}
-let wiki.path = '~/vimwiki/'
-let wiki.nested_syntaxes = {'python': 'python', 'c++': 'cpp', 'c': 'c', 'php': 'php', 'json': 'json'}
-let g:vimwiki_list = [wiki]
 
 
 " ================
