@@ -5,15 +5,22 @@ let mapleader = "\<Space>"
 call plug#begin('~/.vim/plugged')
 
 " ---
-"ALE must be loaded before YCM in order not to screw with the completion
 
 Plug 'Isty001/ale'
 
 let g:php_phpstan_configuration = '--autoload-file=' . get(g:, 'php_autoloader_file')
+let g:ale_sign_column_always = 1
+let g:ale_fixers = {
+\   'php': ['php_cs_fixer']
+\}
+
+nnoremap <leader>r :ALEFix<CR>
 
 " ---
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" Extensions: phpls, solargraph, json, ultisnips
 
 " SEE: https://github.com/neoclide/coc.nvim
 
@@ -52,6 +59,8 @@ endfunction
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
 
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
 
 " Use `[c` and `]c` to navigate diagnostics
 nmap <silent> [c <Plug>(coc-diagnostic-prev)
@@ -136,41 +145,71 @@ nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
 
 
-"""""
-" Search
+" ---
+
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
-" NERDTree
-Plug 'scrooloose/nerdtree'
+map <leader>f :FZF<CR>
+map <leader>a :Ag<CR>
+let s:ag_options = ' --skip-vcs-ignores --path-to-ignore=.vim-ignore'
+let $FZF_DEFAULT_COMMAND = 'ag -g ""' . s:ag_options
 
-" Color
-Plug 'kaicataldo/material.vim'
-Plug 'whatyouhide/vim-gotham'
-Plug 'connorholyday/vim-snazzy'
-Plug 'liuchengxu/space-vim-theme'
-Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
+function! s:ag_with_opts(arg, bang)
+  let tokens  = split(a:arg)
+  let ag_opts = join(filter(copy(tokens), 'v:val =~ "^-"')) . ' --skip-vcs-ignores --path-to-ignore=.vim-ignore --color --color-path="0;38;5;24" --color-line-number="0" --color-match="1;33"'
+  let query   = join(filter(copy(tokens), 'v:val !~ "^-"'))
+  call fzf#vim#ag(query, ag_opts, a:bang ? {} : {'down': '40%'})
+endfunction
 
-" Tags
-Plug 'ludovicchabant/vim-gutentags'
+autocmd VimEnter * command! -nargs=* -bang Ag call s:ag_with_opts(<q-args>, <bang>0)
+
+" FZF colors
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
 
 " ---
 
-" UI
+Plug 'scrooloose/nerdtree'
+
+let NERDTreeShowHidden=1
+let g:NERDTreeWinSize=40
+
+if !&diff
+    autocmd vimenter * NERDTree
+    autocmd StdinReadPre * let s:std_in=1
+    autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+    autocmd VimEnter * wincmd p
+endif
+
+nmap <leader>g :NERDTreeFind<CR><C-w>l<CR>
+
+" ---
+
+Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
+
+" ---
+
 Plug 'qpkorr/vim-bufkill'
-Plug 'ap/vim-buftabline'
 
+nnoremap <C-c> :BD<CR>
 
-"History
-Plug 'yegappan/mru'
-Plug 'mbbill/undotree'
-
-" Editor
-Plug 'Raimondi/delimitMate'
-" Plug 'tpope/vim-surround'
-Plug 'machakann/vim-sandwich'
-Plug 'LandonSchropp/vim-stamp'
-Plug 'kshenoy/vim-signature'
+" ---
 
 " ---
 
@@ -182,7 +221,19 @@ let g:auto_save_in_insert_mode = 0
 " ---
 
 Plug 'dkprice/vim-easygrep'
+
+let g:EasyGrepRecursive=1
+
+autocmd vimenter * silent! GrepProgram ag
+
+" ---
+
 Plug 'matze/vim-move'
+
+let g:move_key_modifier = 'C'
+
+" ---
+
 Plug 'editorconfig/editorconfig-vim'
 
 " ---
@@ -202,14 +253,6 @@ let g:UltiSnipsSnippetsDir = "~/.vim/ulti-snips"
 let g:UltiSnipsJumpForwardTrigger="<C-l>"
 let g:UltiSnipsJumpBackwardTrigger="<C-h>"
 
-
-Plug 'machakann/vim-highlightedyank'
-Plug 'tpope/vim-commentary'
-Plug 'easymotion/vim-easymotion'
-Plug 'rhysd/clever-f.vim'
-Plug 'romainl/vim-cool' " Disables highlight after finishing search
-Plug 'tpope/vim-endwise'
-
 " ---
 
 Plug 'alvan/vim-closetag'
@@ -220,138 +263,11 @@ autocmd BufNewFile,BufRead *.html.php set ft=php.html
 
 " ---
 
-Plug 'tpope/vim-abolish'
-Plug 'google/vim-searchindex'
-
-" ---
-
-" Plug 'itchyny/calendar.vim'
-
-let g:calendar_google_calendar = 1
-let g:calendar_google_task = 1
-
-" ---
-
-" PHP
-Plug 'docteurklein/php-getter-setter.vim', {'for': 'php'}
-Plug 'adoy/vim-php-refactoring-toolbox', {'for': 'php'}
-Plug 'beberlei/vim-php-refactor', {'for': 'php'}
-Plug 'arnaud-lb/vim-php-namespace', {'for': 'php'}
-Plug 'aliou/sql-heredoc.vim'
-
-
-" SQL
-Plug 'vim-scripts/dbext.vim', {'for': 'sql'}
-
-
-" Git
-Plug 'tpope/vim-fugitive'
-Plug 'mhinz/vim-signify'
-
-
-Plug 'joukevandermaas/vim-ember-hbs', {'for': 'html.handlebars'}
-Plug 'jwalton512/vim-blade'
-
-" Build & Test
-" ---
 Plug 'benmills/vimux'
 
 map <leader>x :VimuxRunLastCommand<cr>
+
 autocmd FileType c,cpp map <C-x> :call VimuxRunCommand("make test")<CR>
-
-" ---
-
-Plug 'janko-m/vim-test'
-
-let test#strategy = "vimux"
-
-
-nmap <silent> <C-n> :TestNearest<CR>
-nmap <silent> <C-x> :TestFile<CR>
-nmap <silent> <C-t> :TestLast<CR>
-
-
-" ---
-
-" Game
-Plug 'johngrib/vim-game-code-break'
-Plug 'johngrib/vim-game-snake'
-Plug 'uguu-org/vim-matrix-screensaver'
-Plug 'vim-scripts/TeTrIs.vim'
-
-
-call plug#end()
-
-runtime macros/matchit.vim
-" packadd cfilter
-
-
-" ============
-" == Keymap ==
-" ============
-
-
-" == Delete newxt word
-imap <C-b> <C-[>dvb
-
-" == Search
-nmap <leader>g :NERDTreeFind<CR><C-w>l<CR>
-map <leader>f :FZF<CR>
-map <leader>a :Ag<CR>
-vnoremap // y/<C-R>"<CR>
-
-" == Windows
-nnoremap <C-c> :BD<CR>
-
-map <C-h> <C-W>h
-map <C-l> <C-W>l
-
-" == Line/Selection moving
-let g:move_key_modifier = 'C'
-
-" == Navigate between tabs
-nmap <Tab> :bn<CR>
-nmap <S-Tab> :bp<CR>
-
-" == Indent in viusal mode, reselect text
-vnoremap < <gv
-vnoremap > >gv
-
-" == History
-nnoremap <leader>h :UndotreeToggle<cr>
-
-" == Indentation highlight
-map <leader>l :RainbowLevelsToggle<cr>
-
-
-" == Navigation in popup menu
-inoremap <expr> <C-j> pumvisible() ? "\<C-N>" : "j"
-inoremap <expr> <C-k> pumvisible() ? "\<C-P>" : "k"
-
-" == Use PHP class under cursor
-autocmd FileType php inoremap <C-p> <Esc>:call IPhpInsertUse()<CR>
-autocmd FileType php noremap <C-p> :call PhpInsertUse()<CR>
-
-" Always delete to black hole
-nnoremap d "_d
-vnoremap d "_d
-
-" Navigate in command mode
-cnoremap <C-K> <Up>
-cnoremap <C-J> <Down>
-
-nnoremap <leader>r :ALEFix<CR>
-
-let g:ale_fixers = {
-\   'php': ['php_cs_fixer'],
-\   'c': ['clang-format']
-\}
-
-let g:ale_sign_column_always=1
-
-" ==========
-" == TMUX ==
-" ==========
 
 if exists('$TMUX')
     set term=screen-256color
@@ -370,16 +286,131 @@ if &term =~ '^screen'
     let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 endif
 
+" ---
 
-" =================
-" == ColorScheme ==
-" =================
+Plug 'janko-m/vim-test'
+
+let test#strategy = "vimux"
+
+nmap <silent> <C-n> :TestNearest<CR>
+nmap <silent> <C-x> :TestFile<CR>
+nmap <silent> <C-t> :TestLast<CR>
+
+" ---
+
+Plug 'derekwyatt/vim-scala'
+
+au BufRead,BufNewFile *.sbt set filetype=scala
+
+" ---
+
+" Example: :%Subvert/facilit{y,ies}/building{,s}/g
+Plug 'tpope/vim-abolish'
+
+" ---
+
+Plug 'ap/vim-buftabline'
+
+" ---
+
+Plug 'yegappan/mru'
+
+let MRU_Window_Height = 15
+let MRU_Max_Menu_Entries = 15
+let MRU_Max_Submenu_Entries = 15
+let MRU_Auto_Close = 1
+
+" ---
+
+Plug 'mbbill/undotree'
+
+let g:undotree_WindowLayout = 4
+let g:undotree_SplitWidth = 40
+let g:undotree_DiffpanelHeight = 20
+
+" ---
+
+Plug 'Raimondi/delimitMate'
+Plug 'machakann/vim-sandwich'
+Plug 'LandonSchropp/vim-stamp'
+Plug 'kshenoy/vim-signature'
+Plug 'machakann/vim-highlightedyank'
+Plug 'tpope/vim-commentary'
+Plug 'easymotion/vim-easymotion'
+Plug 'rhysd/clever-f.vim'
+Plug 'romainl/vim-cool' " Disables highlight after finishing search
+Plug 'tpope/vim-endwise'
+Plug 'google/vim-searchindex'
+Plug 'docteurklein/php-getter-setter.vim', {'for': 'php'}
+Plug 'adoy/vim-php-refactoring-toolbox', {'for': 'php'}
+Plug 'beberlei/vim-php-refactor', {'for': 'php'}
+Plug 'arnaud-lb/vim-php-namespace', {'for': 'php'}
+Plug 'aliou/sql-heredoc.vim'
+Plug 'tpope/vim-fugitive'
+Plug 'mhinz/vim-signify'
+Plug 'joukevandermaas/vim-ember-hbs', {'for': 'html.handlebars'}
+Plug 'johngrib/vim-game-code-break'
+Plug 'johngrib/vim-game-snake'
+Plug 'uguu-org/vim-matrix-screensaver'
+Plug 'vim-scripts/TeTrIs.vim'
+
+" ---
+
+call plug#end()
+
+runtime macros/matchit.vim
+
+" ---
+" Keymap
+" ---
+
+
+" search visually selected text
+vnoremap // y/<C-R>"<CR>
+
+" change window
+map <C-h> <C-W>h
+map <C-l> <C-W>l
+
+
+" == Navigate between buffers
+nmap <Tab> :bn<CR>
+nmap <S-Tab> :bp<CR>
+
+" == Indent in viusal mode, reselect text
+vnoremap < <gv
+vnoremap > >gv
+
+" == History
+nnoremap <leader>h :UndotreeToggle<cr>
+
+" == Indentation highlight
+map <leader>l :RainbowLevelsToggle<cr>
+
+
+" == Navigation in popup menu
+inoremap <expr> <C-j> pumvisible() ? "\<C-N>" : "j"
+inoremap <expr> <C-k> pumvisible() ? "\<C-P>" : "k"
+
+" Always delete to black hole
+nnoremap d "_d
+vnoremap d "_d
+
+" Navigate in command mode
+cnoremap <C-K> <Up>
+cnoremap <C-J> <Down>
+
+
+" ---
+" Color scheme
+" ---
 
 syntax on
 filetype plugin indent on
 
 set termguicolors
 set t_Co=256
+set exrc
 
 set background=dark
 
@@ -387,26 +418,22 @@ color challenger_deep
 
 hi Normal guibg=NONE ctermbg=NONE
 
-if g:colors_name == "snazzy"
-    highlight Normal guibg=#180C26
-endif
 
-" ==================
-" == VIM SETTINGS ==
-" ==================
-
+" ---
+" Vim Settings
+" ---
 
 set nocompatible
 set encoding=utf8
 set ignorecase
 set history=600
+set exrc
 
 set ttyfast
 
-autocmd BufNewFile,BufRead *.html.php   set ft=php
+autocmd BufNewFile,BufRead *.html.php set ft=php
 
-"This makes the autocomplete dropdown flashing and slowish :-(
-"set lazyredraw
+set lazyredraw
 
 set hlsearch
 
@@ -443,110 +470,9 @@ set undofile
 set undodir=$HOME/.vim/tmp//
 
 
-" =========
-" == PHP ==
-" =========
-
-function! IPhpInsertUse()
-    call PhpInsertUse()
-    call feedkeys('a', 'n')
-endfunction
-
-autocmd FileType php nnoremap <silent><leader>pcf :call PhpCsFixerFixFile()<CR>
-
-let g:php_namespace_sort_after_insert = 1
-
-
-" ====================
-" == Tag generation ==
-" ====================
-
-"let g:gutentags_project_root = ['src']
-let g:gutentags_cache_dir = "~/.cache/tags"
-let g:gutentags_ctags_executable_php = "ctags -R --fields=+aimlS --languages=php --PHP-kinds=+cfit-va"
-
-set statusline+=%{gutentags#statusline()}
-
-" ==============
-" == NERDTree ==
-" ==============
-
-let NERDTreeShowHidden=1
-let g:NERDTreeWinSize=40
-
-if !&diff
-    autocmd vimenter * NERDTree
-    autocmd StdinReadPre * let s:std_in=1
-    autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
-    autocmd VimEnter * wincmd p
-endif
-
-
-" ===================
-" == Search FZF/AG ==
-" ===================
-
-let s:ag_options = ' --skip-vcs-ignores --path-to-ignore=.vim-ignore'
-let $FZF_DEFAULT_COMMAND = 'ag -g ""' . s:ag_options
-
-function! s:ag_with_opts(arg, bang)
-  let tokens  = split(a:arg)
-  let ag_opts = join(filter(copy(tokens), 'v:val =~ "^-"')) . ' --skip-vcs-ignores --path-to-ignore=.vim-ignore --color --color-path="0;38;5;24" --color-line-number="0" --color-match="1;33"'
-  let query   = join(filter(copy(tokens), 'v:val !~ "^-"'))
-  call fzf#vim#ag(query, ag_opts, a:bang ? {} : {'down': '40%'})
-endfunction
-
-autocmd VimEnter * command! -nargs=* -bang Ag call s:ag_with_opts(<q-args>, <bang>0)
-
-" FZF colors
-let g:fzf_colors =
-\ { 'fg':      ['fg', 'Normal'],
-  \ 'bg':      ['bg', 'Normal'],
-  \ 'hl':      ['fg', 'Comment'],
-  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-  \ 'hl+':     ['fg', 'Statement'],
-  \ 'info':    ['fg', 'PreProc'],
-  \ 'border':  ['fg', 'Ignore'],
-  \ 'prompt':  ['fg', 'Conditional'],
-  \ 'pointer': ['fg', 'Exception'],
-  \ 'marker':  ['fg', 'Keyword'],
-  \ 'spinner': ['fg', 'Label'],
-  \ 'header':  ['fg', 'Comment'] }
-
-" Replace
-let g:EasyGrepRecursive=1
-autocmd vimenter * silent! GrepProgram ag
-
-" =========
-" == MRU ==
-" =========
-
-let MRU_Window_Height = 15
-let MRU_Max_Menu_Entries = 15
-let MRU_Max_Submenu_Entries = 15
-let MRU_Auto_Close = 1
-
-
-" ==============
-" == UndoTree ==
-" ==============
-
-let g:undotree_WindowLayout = 4
-
-" == Width
-let g:undotree_SplitWidth = 40
-
-" == Height
-let g:undotree_DiffpanelHeight = 20
-
-
-" ================
-" == Swap words ==
-" ================
+" ---
+" Swap words
+" ---
 
 " :call SwapWords({'foo':'bar'})
 "
@@ -579,7 +505,3 @@ function! SwapWords(dict, ...)
         \ . '\=' . string(Mirror(a:dict)) . '[S(0)]'
         \ . delimiter . 'g'
 endfunction
-
-" Project settings
-silent! so .vimlocal
-
