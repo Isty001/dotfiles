@@ -1,7 +1,9 @@
 {
     "intelephense.files.exclude": [
         "**/cache/**/classes.php",
-        "*app*/**/cache/**"
+        "*app*/**/cache/**",
+        "**/cache/**/doctrine/**",
+        "**/*bootstrap.php"
     ],
     "intelephense.completion.insertUseDeclaration": true,
     "intelephense.stubs": [
