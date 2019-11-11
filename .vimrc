@@ -146,7 +146,6 @@ nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 
 
 " ---
-
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
@@ -164,7 +163,6 @@ endfunction
 
 autocmd VimEnter * command! -nargs=* -bang Ag call s:ag_with_opts(<q-args>, <bang>0)
 
-" FZF colors
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
   \ 'bg':      ['bg', 'Normal'],
@@ -235,6 +233,14 @@ let g:move_key_modifier = 'C'
 " ---
 
 Plug 'editorconfig/editorconfig-vim'
+
+" ---
+
+Plug 'wellle/targets.vim'
+
+autocmd User targets#mappings#user call targets#mappings#extend({
+    \ '%': {'separator': [{'d': '%'}]},
+    \ })
 
 " ---
 
@@ -468,7 +474,7 @@ set directory^=$HOME/.vim/tmp//
 
 set undofile
 set undodir=$HOME/.vim/tmp//
-
+set undolevels=1000
 
 " ---
 " Swap words
