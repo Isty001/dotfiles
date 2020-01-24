@@ -236,6 +236,10 @@ Plug 'editorconfig/editorconfig-vim'
 
 " ---
 
+Plug 'psliwka/vim-smoothie'
+
+" ---
+
 Plug 'wellle/targets.vim'
 
 autocmd User targets#mappings#user call targets#mappings#extend({
@@ -279,6 +283,8 @@ if exists('$TMUX')
     set term=screen-256color
     set t_8f=^[[38;2;%lu;%lu;%lum
     set t_8b=^[[48;2;%lu;%lu;%lum
+    let &t_ZH="\e[3m"
+    let &t_ZR="\e[23m"
 endif
 
 if &term =~ '^screen'
@@ -359,6 +365,7 @@ Plug 'johngrib/vim-game-code-break'
 Plug 'johngrib/vim-game-snake'
 Plug 'uguu-org/vim-matrix-screensaver'
 Plug 'vim-scripts/TeTrIs.vim'
+Plug 'vim/killersheep'
 
 " ---
 
@@ -422,6 +429,7 @@ set background=dark
 
 color challenger_deep
 
+hi Comment gui=italic cterm=italic
 hi Normal guibg=NONE ctermbg=NONE
 
 
@@ -457,6 +465,7 @@ set expandtab
 set nu
 set relativenumber
 set cursorline
+set scrolloff=3
 
 set nofoldenable
 
