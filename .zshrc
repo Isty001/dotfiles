@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block, everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 export TERM="xterm-256color"
 
 # Path to your oh-my-zsh installation.
@@ -11,7 +18,6 @@ export ZSH=~/.oh-my-zsh
 #ZSH_THEME="fino"
 #ZSH_THEME="afowler"
 #ZSH_THEME="powerlevel9k/powerlevel9k"
-
 
 ZSH_THEME="geoffgarside"
 #ZSH_THEME="ys"
@@ -54,16 +60,17 @@ ZSH_THEME="geoffgarside"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
+# Example format: plugins=(rails git textmate uby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git debian symfony2 history)
 
 # User configuration
 
-export PATH="~/.rvm/gems/ruby-2.3.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:$HOME/.cargo/bin:$HOME/.cabal/bin:$HOME/.local/bin"
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:$HOME/.cargo/bin:$HOME/.cabal/bin:$HOME/.local/bin"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
+
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -90,7 +97,6 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-
 # Man colors
 export MANROFFOPT='-c'
 export LESS_TERMCAP_mb=$(tput bold; tput setaf 2)
@@ -109,9 +115,6 @@ alias json="jq -C '.' | less -R"
 alias html="lynx -stdin"
 alias python="python3"
 
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
-
-
 export NVM_DIR="~/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
@@ -123,11 +126,39 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-
-source ~/.rvm/scripts/rvm
-
 export NVM_DIR=~/.nvm
 source ~/.nvm/nvm.sh
 
-
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+# export PATH="$PATH:$HOME/.rvm/bin"
+
+export LD_LIBRARY_PATH="/usr/lib/libreoffice/program:$LD_LIBRARY_PATH"
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+# source ~/powerlevel10k/powerlevel10k.zsh-theme
+
+##
+# NAVIGATION
+##
+autoload -U history-search-end
+
+zle -N history-beginning-search-backward-end history-search-end
+zle -N history-beginning-search-forward-end history-search-end
+
+bindkey "^k" history-beginning-search-backward-end
+bindkey "^j" history-beginning-search-forward-end
+bindkey '^h' vi-backward-char        # left
+bindkey '^l' vi-forward-char         # right
+bindkey "^[^L" clear-screen
+bindkey '^b' vi-backward-word
+bindkey '^w' vi-forward-word
+
+##
+# ALIAS
+##
+alias json="jq -C '.' | less -R"
+alias html="lynx -stdin"
+alias python="python3"
+
+alias ag='ag --skip-vcs-ignores'
+
