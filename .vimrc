@@ -200,18 +200,13 @@ nmap <leader>g :NERDTreeFind<CR><C-w>l<CR>
 " ---
 
 Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
-
-" ---
-
-Plug 'kyoz/purify', {'rtp': 'vim'}
+Plug 'lewis6991/moonlight.vim'
 
 " ---
 
 Plug 'qpkorr/vim-bufkill'
 
 nnoremap <C-c> :BD<CR>
-
-" ---
 
 " ---
 
@@ -351,6 +346,9 @@ Plug 'machakann/vim-sandwich'
 Plug 'LandonSchropp/vim-stamp'
 Plug 'kshenoy/vim-signature'
 Plug 'machakann/vim-highlightedyank'
+
+highlight HighlightedyankRegion gui=italic cterm=italic
+
 Plug 'tpope/vim-commentary'
 Plug 'easymotion/vim-easymotion'
 Plug 'rhysd/clever-f.vim'
@@ -368,8 +366,9 @@ Plug 'tpope/vim-fugitive'
 "
 Plug 'itchyny/vim-gitbranch'
 
+
 set statusline=%f         " Path to the file
-set statusline+=%=        " Switch to the right side
+set statusline+=\ -\      " Separator
 set statusline+=%{gitbranch#name()}
 
 " ---
@@ -410,9 +409,6 @@ vnoremap > >gv
 " == History
 nnoremap <leader>h :UndotreeToggle<cr>
 
-" == Indentation highlight
-map <leader>l :RainbowLevelsToggle<cr>
-
 
 " == Navigation in popup menu
 inoremap <expr> <C-j> pumvisible() ? "\<C-N>" : "j"
@@ -440,12 +436,14 @@ set exrc
 
 set background=dark
 
-color challenger_deep
+" color challenger_deep
+color moonlight
 
-hi VertSplit guifg=fg guibg=bg
-hi Comment gui=italic cterm=italic
-hi Normal guibg=NONE ctermbg=NONE
+" hi VertSplit guifg=fg guibg=bg
+" hi Comment gui=italic cterm=italic
+" hi Normal guibg=NONE ctermbg=NONE
 
+hi Visual ctermfg=3 ctermbg=8 guibg=#444650
 
 " ---
 " Vim Settings
