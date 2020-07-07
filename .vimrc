@@ -443,7 +443,7 @@ color moonlight
 " hi Comment gui=italic cterm=italic
 " hi Normal guibg=NONE ctermbg=NONE
 
-hi Visual ctermfg=3 ctermbg=8 guibg=#444650
+hi Visual ctermfg=3 ctermbg=8 guibg=#82858C
 
 " ---
 " Vim Settings
