@@ -6,7 +6,7 @@ call plug#begin('~/.vim/plugged')
 
 " ---
 
-Plug 'Isty001/ale'
+" Plug 'Isty001/ale'
 
 let g:php_phpstan_configuration = '--autoload-file=' . get(g:, 'php_autoloader_file')
 let g:ale_sign_column_always = 1
@@ -203,6 +203,10 @@ Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
 
 " ---
 
+Plug 'kyoz/purify', {'rtp': 'vim'}
+
+" ---
+
 Plug 'qpkorr/vim-bufkill'
 
 nnoremap <C-c> :BD<CR>
@@ -359,6 +363,17 @@ Plug 'beberlei/vim-php-refactor', {'for': 'php'}
 Plug 'arnaud-lb/vim-php-namespace', {'for': 'php'}
 Plug 'aliou/sql-heredoc.vim'
 Plug 'tpope/vim-fugitive'
+
+" ----
+"
+Plug 'itchyny/vim-gitbranch'
+
+set statusline=%f         " Path to the file
+set statusline+=%=        " Switch to the right side
+set statusline+=%{gitbranch#name()}
+
+" ---
+
 Plug 'mhinz/vim-signify'
 Plug 'joukevandermaas/vim-ember-hbs', {'for': 'html.handlebars'}
 Plug 'johngrib/vim-game-code-break'
@@ -366,8 +381,6 @@ Plug 'johngrib/vim-game-snake'
 Plug 'uguu-org/vim-matrix-screensaver'
 Plug 'vim-scripts/TeTrIs.vim'
 Plug 'vim/killersheep'
-
-" ---
 
 call plug#end()
 
@@ -429,6 +442,7 @@ set background=dark
 
 color challenger_deep
 
+hi VertSplit guifg=fg guibg=bg
 hi Comment gui=italic cterm=italic
 hi Normal guibg=NONE ctermbg=NONE
 
@@ -484,6 +498,13 @@ set directory^=$HOME/.vim/tmp//
 set undofile
 set undodir=$HOME/.vim/tmp//
 set undolevels=1000
+
+
+" Keep window position on buffer change
+if v:version >= 700
+  au BufLeave * let b:winview = winsaveview()
+  au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
+endif
 
 " ---
 " Swap words
