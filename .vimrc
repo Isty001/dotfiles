@@ -201,6 +201,7 @@ nmap <leader>g :NERDTreeFind<CR><C-w>l<CR>
 
 Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
 Plug 'lewis6991/moonlight.vim'
+Plug 'dracula/vim', { 'as': 'dracula' }
 
 " ---
 
@@ -345,6 +346,9 @@ Plug 'Raimondi/delimitMate'
 Plug 'machakann/vim-sandwich'
 Plug 'LandonSchropp/vim-stamp'
 Plug 'kshenoy/vim-signature'
+
+" ---
+
 Plug 'machakann/vim-highlightedyank'
 
 highlight HighlightedyankRegion gui=italic cterm=italic
@@ -358,9 +362,10 @@ Plug 'google/vim-searchindex'
 Plug 'docteurklein/php-getter-setter.vim', {'for': 'php'}
 Plug 'adoy/vim-php-refactoring-toolbox', {'for': 'php'}
 Plug 'beberlei/vim-php-refactor', {'for': 'php'}
-Plug 'arnaud-lb/vim-php-namespace', {'for': 'php'}
-Plug 'aliou/sql-heredoc.vim'
+" Plug 'arnaud-lb/vim-php-namespace', {'for': 'php'}
+" Plug 'aliou/sql-heredoc.vim'
 Plug 'tpope/vim-fugitive'
+Plug 'StanAngeloff/php.vim'
 
 " ----
 "
@@ -375,10 +380,6 @@ set statusline+=%{gitbranch#name()}
 
 Plug 'mhinz/vim-signify'
 Plug 'joukevandermaas/vim-ember-hbs', {'for': 'html.handlebars'}
-Plug 'johngrib/vim-game-code-break'
-Plug 'johngrib/vim-game-snake'
-Plug 'uguu-org/vim-matrix-screensaver'
-Plug 'vim-scripts/TeTrIs.vim'
 Plug 'vim/killersheep'
 
 call plug#end()
@@ -437,11 +438,12 @@ set exrc
 set background=dark
 
 " color challenger_deep
-color moonlight
+" color moonlight
+color dracula
 
 " hi VertSplit guifg=fg guibg=bg
 " hi Comment gui=italic cterm=italic
-" hi Normal guibg=NONE ctermbg=NONE
+hi Normal guibg=NONE ctermbg=NONE
 
 hi Visual ctermfg=3 ctermbg=8 guibg=#82858C
 
