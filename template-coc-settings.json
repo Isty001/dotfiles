@@ -85,6 +85,7 @@
             "zip",
             "zlib"
     ],
+    "intelephense.licenceKey": "xxxxx",
     "languageserver": {
         "metals": {
             "command": "metals-vim",
