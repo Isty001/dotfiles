@@ -1,4 +1,11 @@
 {
+    "intelephense.files.exclude": [
+        "**/cache/**/classes.php",
+        "*app*/**/cache/**",
+        "**/cache/**/doctrine/**",
+        "**/*bootstrap.php"
+    ],
+    "intelephense.rename.exclude": [],
     "intelephense.references.exclude": [
         "**/classes.php",
         "*app*/**/cache/**",
@@ -6,11 +13,7 @@
         "**/*bootstrap.php"
     ],
     "intelephense.completion.insertUseDeclaration": true,
-    "intelephense.telemetry.enabled": false,
-    "intelephense.format.enable": true,
     "intelephense.completion.triggerParameterHints": true,
-    "intelephense.completion.fullyQualifyGlobalConstantsAndFunctions": true,
-    "intelephense.trace.server": "messages",
     "intelephense.stubs": [
             "imagick",
             "apache",
