@@ -200,7 +200,6 @@ nmap <leader>g :NERDTreeFind<CR><C-w>l<CR>
 " ---
 
 Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
-Plug 'lewis6991/moonlight.vim'
 Plug 'dracula/vim', { 'as': 'dracula' }
 
 " ---
@@ -350,9 +349,6 @@ Plug 'kshenoy/vim-signature'
 " ---
 
 Plug 'machakann/vim-highlightedyank'
-
-highlight HighlightedyankRegion gui=italic cterm=italic
-
 Plug 'tpope/vim-commentary'
 Plug 'easymotion/vim-easymotion'
 Plug 'rhysd/clever-f.vim'
@@ -410,6 +406,10 @@ vnoremap > >gv
 " == History
 nnoremap <leader>h :UndotreeToggle<cr>
 
+" == Copy file path
+
+nmap <leader>p :let @+=expand("%:p")<cr>
+nmap <leader>rp :let @+=expand("%")<cr>
 
 " == Navigation in popup menu
 inoremap <expr> <C-j> pumvisible() ? "\<C-N>" : "j"
@@ -438,11 +438,8 @@ set exrc
 set background=dark
 
 " color challenger_deep
-" color moonlight
 color dracula
 
-" hi VertSplit guifg=fg guibg=bg
-" hi Comment gui=italic cterm=italic
 hi Normal guibg=NONE ctermbg=NONE
 
 hi Visual ctermfg=3 ctermbg=8 guibg=#82858C
