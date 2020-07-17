@@ -201,6 +201,7 @@ nmap <leader>g :NERDTreeFind<CR><C-w>l<CR>
 
 Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
 Plug 'dracula/vim', { 'as': 'dracula' }
+Plug 'skbolton/embark'
 
 " ---
 
@@ -309,9 +310,9 @@ nmap <silent> <C-t> :TestLast<CR>
 
 " ---
 
-Plug 'derekwyatt/vim-scala'
+" Plug 'derekwyatt/vim-scala'
 
-au BufRead,BufNewFile *.sbt set filetype=scala
+" au BufRead,BufNewFile *.sbt set filetype=scala
 
 " ---
 
@@ -361,10 +362,17 @@ Plug 'beberlei/vim-php-refactor', {'for': 'php'}
 " Plug 'arnaud-lb/vim-php-namespace', {'for': 'php'}
 " Plug 'aliou/sql-heredoc.vim'
 Plug 'tpope/vim-fugitive'
+
+" ---
+
 Plug 'StanAngeloff/php.vim'
 
+syntax sync minlines=100
+syntax sync maxlines=150
+set synmaxcol=500
+
 " ----
-"
+
 Plug 'itchyny/vim-gitbranch'
 
 
