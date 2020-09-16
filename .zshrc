@@ -162,3 +162,5 @@ alias python="python3"
 
 alias ag='ag --skip-vcs-ignores'
 
+autoload -U select-word-style
+select-word-style bash

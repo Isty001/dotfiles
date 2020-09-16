@@ -6,7 +6,7 @@ call plug#begin('~/.vim/plugged')
 
 " ---
 
-" Plug 'Isty001/ale'
+Plug 'Isty001/ale'
 
 let g:php_phpstan_configuration = '--autoload-file=' . get(g:, 'php_autoloader_file')
 let g:ale_sign_column_always = 1
@@ -15,6 +15,8 @@ let g:ale_fixers = {
 \}
 
 nnoremap <leader>r :ALEFix<CR>
+
+autocmd FileType yaml,c :ALEDisable
 
 " ---
 
@@ -195,7 +197,8 @@ if !&diff
     autocmd VimEnter * wincmd p
 endif
 
-nmap <leader>g :NERDTreeFind<CR><C-w>l<CR>
+nmap <leader>g :NERDTreeFind<CR>
+nmap <leader>G :NERDTreeFind<CR><C-w>l<CR>
 
 " ---
 
@@ -362,14 +365,15 @@ Plug 'beberlei/vim-php-refactor', {'for': 'php'}
 " Plug 'arnaud-lb/vim-php-namespace', {'for': 'php'}
 " Plug 'aliou/sql-heredoc.vim'
 Plug 'tpope/vim-fugitive'
+Plug 'evidens/vim-twig'
 
 " ---
 
-Plug 'StanAngeloff/php.vim'
+" Plug 'StanAngeloff/php.vim'
 
-syntax sync minlines=100
-syntax sync maxlines=150
-set synmaxcol=500
+" syntax sync minlines=100
+" syntax sync maxlines=150
+" set synmaxcol=500
 
 " ----
 
@@ -445,8 +449,8 @@ set exrc
 
 set background=dark
 
-" color challenger_deep
-color dracula
+color challenger_deep
+" color dracula
 
 hi Normal guibg=NONE ctermbg=NONE
 
