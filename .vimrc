@@ -11,12 +11,14 @@ Plug 'Isty001/ale'
 let g:php_phpstan_configuration = '--autoload-file=' . get(g:, 'php_autoloader_file')
 let g:ale_sign_column_always = 1
 let g:ale_fixers = {
-\   'php': ['php_cs_fixer']
+\   'php': ['php_cs_fixer'],
+\   'yaml': ['prettier'],
+\   'ruby': ['rubocop']
 \}
 
 nnoremap <leader>r :ALEFix<CR>
 
-autocmd FileType yaml,c :ALEDisable
+" autocmd FileType yaml,c :ALEDisable
 
 " ---
 
@@ -145,7 +147,7 @@ nnoremap <silent> <space>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
 nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
-
+nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 " ---
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -160,7 +162,7 @@ function! s:ag_with_opts(arg, bang)
   let tokens  = split(a:arg)
   let ag_opts = join(filter(copy(tokens), 'v:val =~ "^-"')) . ' --skip-vcs-ignores --path-to-ignore=.vim-ignore --color --color-path="0;38;5;24" --color-line-number="0" --color-match="1;33"'
   let query   = join(filter(copy(tokens), 'v:val !~ "^-"'))
-  call fzf#vim#ag(query, ag_opts, a:bang ? {} : {'down': '40%'})
+  call fzf#vim#ag(query, ag_opts, a:bang ? {} : { 'window' : { 'width': 0.9, 'height': 0.6, 'highlight': 'Normal' } })
 endfunction
 
 autocmd VimEnter * command! -nargs=* -bang Ag call s:ag_with_opts(<q-args>, <bang>0)
@@ -255,6 +257,11 @@ Plug 'RRethy/vim-illuminate'
 
 hi link illuminatedWord Visual
 let g:Illuminate_delay = 100
+
+augroup illuminate_augroup
+    autocmd!
+    autocmd VimEnter * hi illuminatedWord cterm=underline gui=underline
+augroup END
 
 " ---
 
@@ -352,7 +359,8 @@ Plug 'kshenoy/vim-signature'
 
 " ---
 
-Plug 'machakann/vim-highlightedyank'
+" Plug 'machakann/vim-highlightedyank'
+Plug 'markonm/hlyank.vim'
 Plug 'tpope/vim-commentary'
 Plug 'easymotion/vim-easymotion'
 Plug 'rhysd/clever-f.vim'
@@ -377,6 +385,7 @@ Plug 'evidens/vim-twig'
 
 " ----
 
+Plug 'noprompt/vim-yardoc'
 Plug 'itchyny/vim-gitbranch'
 
 
@@ -388,7 +397,6 @@ set statusline+=%{gitbranch#name()}
 
 Plug 'mhinz/vim-signify'
 Plug 'joukevandermaas/vim-ember-hbs', {'for': 'html.handlebars'}
-Plug 'vim/killersheep'
 
 call plug#end()
 
