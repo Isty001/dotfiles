@@ -19,6 +19,7 @@ let g:ale_fixers = {
 nnoremap <leader>r :ALEFix<CR>
 
 " autocmd FileType yaml,c :ALEDisable
+autocmd FileType c :ALEDisable
 
 " ---
 
