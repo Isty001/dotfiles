@@ -13,7 +13,9 @@ let g:ale_sign_column_always = 1
 let g:ale_fixers = {
 \   'php': ['php_cs_fixer'],
 \   'yaml': ['prettier'],
-\   'ruby': ['rubocop']
+\   'ruby': ['rubocop'],
+\   'json': ['jq'],
+\   'xml': ['xmllint']
 \}
 
 nnoremap <leader>r :ALEFix<CR>
@@ -206,8 +208,10 @@ nmap <leader>G :NERDTreeFind<CR><C-w>l<CR>
 " ---
 
 Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
+Plug 'pineapplegiant/spaceduck', { 'branch': 'main' }
 Plug 'dracula/vim', { 'as': 'dracula' }
-Plug 'skbolton/embark'
+Plug 'kyoz/purify', { 'rtp': 'vim' }
+
 
 " ---
 
@@ -386,6 +390,13 @@ Plug 'evidens/vim-twig'
 
 " ----
 
+" let g:polyglot_disabled = ['ftdetect', 'sensible', 'autoindent']
+" autocmd BufEnter * set indentexpr=
+
+" Plug 'sheerun/vim-polyglot'
+
+" ---
+
 Plug 'noprompt/vim-yardoc'
 Plug 'itchyny/vim-gitbranch'
 
@@ -458,8 +469,14 @@ set exrc
 
 set background=dark
 
+" color spaceduck
 color challenger_deep
 " color dracula
+" color purify
+
+" let g:purify_undercurl = 0
+
+" hi CursorLine cterm=NONE ctermbg=242
 
 hi Normal guibg=NONE ctermbg=NONE
 
