@@ -208,9 +208,8 @@ nmap <leader>G :NERDTreeFind<CR><C-w>l<CR>
 " ---
 
 Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
-Plug 'pineapplegiant/spaceduck', { 'branch': 'main' }
+Plug 'arzg/vim-substrata'
 Plug 'dracula/vim', { 'as': 'dracula' }
-Plug 'kyoz/purify', { 'rtp': 'vim' }
 
 
 " ---
@@ -325,12 +324,6 @@ nmap <silent> <C-t> :TestLast<CR>
 
 " ---
 
-" Plug 'derekwyatt/vim-scala'
-
-" au BufRead,BufNewFile *.sbt set filetype=scala
-
-" ---
-
 " Example: :%Subvert/facilit{y,ies}/building{,s}/g
 Plug 'tpope/vim-abolish'
 
@@ -360,11 +353,10 @@ let g:undotree_DiffpanelHeight = 20
 Plug 'Raimondi/delimitMate'
 Plug 'machakann/vim-sandwich'
 Plug 'LandonSchropp/vim-stamp'
-Plug 'kshenoy/vim-signature'
+" Plug 'kshenoy/vim-signature'
 
 " ---
 
-" Plug 'machakann/vim-highlightedyank'
 Plug 'markonm/hlyank.vim'
 Plug 'tpope/vim-commentary'
 Plug 'easymotion/vim-easymotion'
@@ -375,8 +367,6 @@ Plug 'google/vim-searchindex'
 Plug 'docteurklein/php-getter-setter.vim', {'for': 'php'}
 Plug 'adoy/vim-php-refactoring-toolbox', {'for': 'php'}
 Plug 'beberlei/vim-php-refactor', {'for': 'php'}
-" Plug 'arnaud-lb/vim-php-namespace', {'for': 'php'}
-" Plug 'aliou/sql-heredoc.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'evidens/vim-twig'
 
@@ -409,6 +399,8 @@ set statusline+=%{gitbranch#name()}
 
 Plug 'mhinz/vim-signify'
 Plug 'joukevandermaas/vim-ember-hbs', {'for': 'html.handlebars'}
+Plug 'junegunn/limelight.vim'
+Plug 'jeetsukumaran/vim-markology'
 
 call plug#end()
 
@@ -455,6 +447,8 @@ vnoremap d "_d
 cnoremap <C-K> <Up>
 cnoremap <C-J> <Down>
 
+" Delete mark
+nnoremap dm :execute 'delmarks '.nr2char(getchar())<cr>
 
 " ---
 " Color scheme
@@ -469,10 +463,9 @@ set exrc
 
 set background=dark
 
-" color spaceduck
+" color bogster
 color challenger_deep
 " color dracula
-" color purify
 
 " let g:purify_undercurl = 0
 
