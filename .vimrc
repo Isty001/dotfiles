@@ -150,14 +150,14 @@ nnoremap <silent> <space>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
 nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
-nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+nnoremap <silent><nowait> <space>l  :<C-u>CocListResume<CR>
 
 " ---
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
 map <leader>f :FZF<CR>
-map <leader>a :Ag<CR>
+" map <leader>a :Ag<CR>
 let s:ag_options = ' --skip-vcs-ignores --path-to-ignore=.vim-ignore'
 let $FZF_DEFAULT_COMMAND = 'ag -g ""' . s:ag_options
 
@@ -208,7 +208,6 @@ nmap <leader>G :NERDTreeFind<CR><C-w>l<CR>
 " ---
 
 Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
-Plug 'arzg/vim-substrata'
 Plug 'dracula/vim', { 'as': 'dracula' }
 
 
