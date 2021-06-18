@@ -208,8 +208,7 @@ nmap <leader>G :NERDTreeFind<CR><C-w>l<CR>
 " ---
 
 Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
-Plug 'dracula/vim', { 'as': 'dracula' }
-
+" Plug 'dracula/vim', { 'as': 'dracula' }
 
 " ---
 
@@ -238,7 +237,7 @@ Plug 'matze/vim-move'
 
 let g:move_key_modifier = 'C'
 
-" ---
+" --
 
 Plug 'editorconfig/editorconfig-vim'
 
@@ -332,27 +331,9 @@ Plug 'ap/vim-buftabline'
 
 " ---
 
-Plug 'yegappan/mru'
-
-let MRU_Window_Height = 15
-let MRU_Max_Menu_Entries = 15
-let MRU_Max_Submenu_Entries = 15
-let MRU_Auto_Close = 1
-
-" ---
-
-Plug 'mbbill/undotree'
-
-let g:undotree_WindowLayout = 4
-let g:undotree_SplitWidth = 40
-let g:undotree_DiffpanelHeight = 20
-
-" ---
-
 Plug 'Raimondi/delimitMate'
 Plug 'machakann/vim-sandwich'
 Plug 'LandonSchropp/vim-stamp'
-" Plug 'kshenoy/vim-signature'
 
 " ---
 
@@ -361,11 +342,9 @@ Plug 'tpope/vim-commentary'
 Plug 'easymotion/vim-easymotion'
 Plug 'rhysd/clever-f.vim'
 Plug 'romainl/vim-cool' " Disables highlight after finishing search
-Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-endwise', {'for': 'ruby'}
 Plug 'google/vim-searchindex'
 Plug 'docteurklein/php-getter-setter.vim', {'for': 'php'}
-Plug 'adoy/vim-php-refactoring-toolbox', {'for': 'php'}
-Plug 'beberlei/vim-php-refactor', {'for': 'php'}
 Plug 'tpope/vim-fugitive'
 Plug 'evidens/vim-twig'
 
@@ -386,7 +365,10 @@ Plug 'evidens/vim-twig'
 
 " ---
 
-Plug 'noprompt/vim-yardoc'
+Plug 'noprompt/vim-yardoc', {'for': 'ruby'}
+
+" ---
+
 Plug 'itchyny/vim-gitbranch'
 
 
@@ -398,8 +380,7 @@ set statusline+=%{gitbranch#name()}
 
 Plug 'mhinz/vim-signify'
 Plug 'joukevandermaas/vim-ember-hbs', {'for': 'html.handlebars'}
-Plug 'junegunn/limelight.vim'
-Plug 'jeetsukumaran/vim-markology'
+Plug 'kshenoy/vim-signature'
 
 call plug#end()
 
@@ -483,6 +464,7 @@ set encoding=utf8
 set ignorecase
 set history=600
 set exrc
+set shell=/bin/bash
 
 set ttyfast
 
