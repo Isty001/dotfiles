@@ -344,9 +344,10 @@ Plug 'rhysd/clever-f.vim'
 Plug 'romainl/vim-cool' " Disables highlight after finishing search
 Plug 'tpope/vim-endwise', {'for': 'ruby'}
 Plug 'google/vim-searchindex'
-Plug 'docteurklein/php-getter-setter.vim', {'for': 'php'}
+Plug 'adoy/vim-php-refactoring-toolbox', {'for': 'php'}
 Plug 'tpope/vim-fugitive'
 Plug 'evidens/vim-twig'
+Plug 'Yggdroot/indentLine'
 
 " ---
 
