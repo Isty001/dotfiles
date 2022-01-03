@@ -29,6 +29,8 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Extensions: phpls, solargraph, json, ultisnips
 
+let g:coc_global_extensions = ['coc-clangd', 'coc-db', 'coc-phpls', 'coc-json', 'coc-ultisnips', 'coc-rls']
+
 " SEE: https://github.com/neoclide/coc.nvim
 
 " if hidden is not set, TextEdit might fail.
@@ -382,6 +384,17 @@ set statusline+=%{gitbranch#name()}
 Plug 'mhinz/vim-signify'
 Plug 'joukevandermaas/vim-ember-hbs', {'for': 'html.handlebars'}
 Plug 'kshenoy/vim-signature'
+
+" ---
+
+Plug 'tpope/vim-dadbod'
+Plug 'kristijanhusak/vim-dadbod-ui'
+
+let g:db_ui_auto_execute_table_helpers = 0
+let g:db_ui_win_position = 'right'
+let g:db_ui_execute_on_save = 0
+
+" ---
 
 call plug#end()
 
