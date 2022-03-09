@@ -122,7 +122,7 @@ export NVM_DIR="~/.nvm"
 alias ag='ag --skip-vcs-ignores'
 
 export EDITOR=vim
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -132,7 +132,7 @@ source ~/.nvm/nvm.sh
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 # export PATH="$PATH:$HOME/.rvm/bin"
 
-export LD_LIBRARY_PATH="/usr/lib/libreoffice/program:$LD_LIBRARY_PATH"
+# export LD_LIBRARY_PATH="/usr/lib/libreoffice/program:$LD_LIBRARY_PATH"
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 # source ~/powerlevel10k/powerlevel10k.zsh-theme

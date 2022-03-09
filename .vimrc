@@ -6,7 +6,7 @@ call plug#begin('~/.vim/plugged')
 
 " ---
 
-Plug 'Isty001/ale'
+Plug 'dense-analysis/ale'
 
 let g:php_phpstan_configuration = '--autoload-file=' . get(g:, 'php_autoloader_file')
 let g:ale_sign_column_always = 1
@@ -353,6 +353,14 @@ Plug 'Yggdroot/indentLine'
 
 " ---
 
+" Plug 'vim-vdebug/vdebug'
+
+" let g:vdebug_options = {}
+" let g:vdebug_options['max_children'] = 128
+
+
+" ---
+
 " Plug 'StanAngeloff/php.vim'
 
 " syntax sync minlines=100
@@ -444,6 +452,9 @@ cnoremap <C-J> <Down>
 " Delete mark
 nnoremap dm :execute 'delmarks '.nr2char(getchar())<cr>
 
+# Reselect inserted text
+nnoremap gp `[v`]
+
 " ---
 " Color scheme
 " ---
@@ -457,7 +468,6 @@ set exrc
 
 set background=dark
 
-" color bogster
 color challenger_deep
 " color dracula
 
