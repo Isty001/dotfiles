@@ -452,7 +452,7 @@ cnoremap <C-J> <Down>
 " Delete mark
 nnoremap dm :execute 'delmarks '.nr2char(getchar())<cr>
 
-# Reselect inserted text
+" Reselect inserted text
 nnoremap gp `[v`]
 
 " ---
