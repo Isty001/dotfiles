@@ -15,8 +15,12 @@ let g:ale_fixers = {
 \   'yaml': ['prettier'],
 \   'ruby': ['rubocop'],
 \   'json': ['jq'],
-\   'xml': ['xmllint']
+\   'xml': ['xmllint'],
+\   'c': ['clang-format'],
+\   'cpp': ['clang-format']
 \}
+
+let g:ale_php_cs_fixer_use_global = 1
 
 nnoremap <leader>r :ALEFix<CR>
 
@@ -29,7 +33,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Extensions: phpls, solargraph, json, ultisnips
 
-let g:coc_global_extensions = ['coc-clangd', 'coc-db', 'coc-phpls', 'coc-json', 'coc-ultisnips', 'coc-rls']
+let g:coc_global_extensions = ['coc-clangd', 'coc-db', 'coc-phpls', 'coc-ultisnips', 'coc-rls', 'coc-sumneko-lua']
 
 " SEE: https://github.com/neoclide/coc.nvim
 
@@ -238,6 +242,7 @@ autocmd vimenter * silent! GrepProgram ag
 Plug 'matze/vim-move'
 
 let g:move_key_modifier = 'C'
+let g:move_key_modifier_visualmode = 'C'
 
 " --
 
