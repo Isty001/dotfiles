@@ -1,4 +1,5 @@
 # for clipboard: sudo apt install libx11-dev libxtst-dev libxt-dev libsm-dev libxpm-dev
+# create ~/.vim/tmp
 
 * Edit src/Make_mvc.mak, set correct `RUBY_VER` and `RUBY_VER_LONG`
 * ./configure --with-features=huge --with-ruby-command=ruby \
