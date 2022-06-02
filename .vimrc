@@ -33,7 +33,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Extensions: phpls, solargraph, json, ultisnips
 
-let g:coc_global_extensions = ['coc-clangd', 'coc-db', 'coc-phpls', 'coc-ultisnips', 'coc-rls', 'coc-sumneko-lua']
+let g:coc_global_extensions = ['coc-clangd', 'coc-db', 'coc-phpls', 'coc-ultisnips', 'coc-rls', 'coc-sumneko-lua', 'coc-solargraph']
 
 " SEE: https://github.com/neoclide/coc.nvim
 
