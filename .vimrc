@@ -39,6 +39,7 @@ let g:coc_global_extensions = ['coc-clangd', 'coc-db', 'coc-phpls', 'coc-ultisni
 
 " if hidden is not set, TextEdit might fail.
 set hidden
+set encoding=utf-8
 
 " Some servers have issues with backup files, see #649
 set nobackup
@@ -57,14 +58,22 @@ set shortmess+=c
 set signcolumn=yes
 
 " Use tab for trigger completion with characters ahead and navigate.
-" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+" NOTE: There's always complete item selected by default, you may want to enable
+" no select by `"suggest.noselect": true` in your configuration file.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
       \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
-function! s:check_back_space() abort
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice.
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
@@ -85,16 +94,19 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
-" Use K to show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call ShowDocumentation()<CR>
 
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
   else
-    call CocAction('doHover')
+    call feedkeys('K', 'in')
   endif
 endfunction
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Highlight symbol under cursor on CursorHold
 " autocmd CursorHold * silent call CocActionAsync('highlight')
@@ -163,6 +175,8 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
 map <leader>f :FZF<CR>
+map <leader>w :Buffers<CR>
+
 " map <leader>a :Ag<CR>
 let s:ag_options = ' --skip-vcs-ignores --path-to-ignore=.vim-ignore'
 let $FZF_DEFAULT_COMMAND = 'ag -g ""' . s:ag_options
@@ -195,6 +209,7 @@ let g:fzf_colors =
 
 Plug 'scrooloose/nerdtree'
 
+
 let NERDTreeShowHidden=1
 let g:NERDTreeWinSize=40
 
@@ -213,8 +228,13 @@ nmap <leader>G :NERDTreeFind<CR><C-w>l<CR>
 
 " ---
 
+" Plug 'ryanoasis/vim-devicons'
+
+" ---
+
 Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
 " Plug 'dracula/vim', { 'as': 'dracula' }
+" Plug 'EdenEast/nightfox.nvim'
 
 " ---
 
@@ -297,6 +317,10 @@ Plug 'benmills/vimux'
 map <leader>x :VimuxRunLastCommand<cr>
 
 autocmd FileType c,cpp map <C-x> :call VimuxRunCommand("make test")<CR>
+
+autocmd FileType php nmap <silent> <leader>v :call VimuxPromptCommand("php " . bufname("%")) <CR><CR>
+autocmd FileType scheme nmap <silent> <leader>v :call VimuxPromptCommand("racket " . bufname("%")) <CR><CR>
+autocmd FileType ruby nmap <silent> <leader>v :call VimuxPromptCommand("ruby " . bufname("%")) <CR><CR>
 
 if exists('$TMUX')
     set term=screen-256color
@@ -443,8 +467,8 @@ nmap <leader>p :let @+=expand("%:p")<cr>
 nmap <leader>rp :let @+=expand("%")<cr>
 
 " == Navigation in popup menu
-inoremap <expr> <C-j> pumvisible() ? "\<C-N>" : "j"
-inoremap <expr> <C-k> pumvisible() ? "\<C-P>" : "k"
+" inoremap <expr> <C-j> pumvisible() ? "\<C-N>" : "j"
+" inoremap <expr> <C-k> pumvisible() ? "\<C-P>" : "k"
 
 " Always delete to black hole
 nnoremap d "_d
@@ -473,16 +497,26 @@ set exrc
 
 set background=dark
 
+"
 color challenger_deep
+
+hi Normal guibg=NONE ctermbg=NONE
+
+hi Visual ctermfg=3 ctermbg=8 guibg=#82858C
+"
+
 " color dracula
+
+" 
+" color koehler
+" hi Directory guifg=#1aff00 ctermfg=green
+"
 
 " let g:purify_undercurl = 0
 
 " hi CursorLine cterm=NONE ctermbg=242
 
-hi Normal guibg=NONE ctermbg=NONE
 
-hi Visual ctermfg=3 ctermbg=8 guibg=#82858C
 
 " ---
 " Vim Settings

@@ -95,6 +95,16 @@
     ],
     "intelephense.licenceKey": "xxxxx",
     "languageserver": {
+        "racket": {
+            "command": "racket",
+            "args": [
+                "-l",
+                "racket-langserver"
+            ],
+            "filetypes": [
+                "scheme", "rkt"
+            ]
+        },
         "metals": {
             "command": "metals-vim",
             "rootPatterns": [
