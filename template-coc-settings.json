@@ -1,4 +1,5 @@
 {
+    "suggest.noselect": true,
     "intelephense.files.exclude": [
         "**/cache/**/classes.php",
         "*app*/**/cache/**",

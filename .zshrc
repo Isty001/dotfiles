@@ -124,7 +124,6 @@ alias ag='ag --skip-vcs-ignores'
 export EDITOR=vim
 # export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export NVM_DIR=~/.nvm
 source ~/.nvm/nvm.sh
@@ -164,3 +163,6 @@ alias ag='ag --skip-vcs-ignores'
 
 autoload -U select-word-style
 select-word-style bash
+
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
