@@ -127,5 +127,6 @@
            }
         }
       },
-      "coc.preferences.extensionUpdateCheck": "daily"
+      "coc.preferences.extensionUpdateCheck": "daily",
+      "clangd.inlayHints.enable": false
 }

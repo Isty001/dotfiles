@@ -33,7 +33,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Extensions: phpls, solargraph, json, ultisnips
 
-let g:coc_global_extensions = ['coc-clangd', 'coc-db', 'coc-phpls', 'coc-ultisnips', 'coc-rls', 'coc-sumneko-lua', 'coc-solargraph']
+let g:coc_global_extensions = ['coc-clangd', 'coc-db', 'coc-phpls', 'coc-ultisnips', 'coc-rls', 'coc-sumneko-lua', 'coc-solargraph', 'coc-spell-checker', 'coc-java']
 
 " SEE: https://github.com/neoclide/coc.nvim
 
@@ -127,8 +127,11 @@ augroup mygroup
 augroup end
 
 " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
+xmap <leader>as  <Plug>(coc-codeaction-source)
+nmap <leader>as  <Plug>(coc-codeaction-source)
+
+nmap <silent> av <Plug>(coc-codeaction-line)
+xmap <silent> av <Plug>(coc-codeaction-selected)
 
 " Remap for do codeAction of current line
 nmap <leader>ac  <Plug>(coc-codeaction)
@@ -233,6 +236,8 @@ nmap <leader>G :NERDTreeFind<CR><C-w>l<CR>
 " ---
 
 Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
+Plug 'srcery-colors/srcery-vim'
+
 " Plug 'dracula/vim', { 'as': 'dracula' }
 " Plug 'EdenEast/nightfox.nvim'
 
@@ -380,6 +385,11 @@ Plug 'tpope/vim-fugitive'
 Plug 'evidens/vim-twig'
 Plug 'Yggdroot/indentLine'
 
+" Plug 'vim-vdebug/vdebug'
+Plug 'puremourning/vimspector'
+
+let g:vimspector_enable_mappings = 'HUMAN'
+
 " ---
 
 " Plug 'vim-vdebug/vdebug'
@@ -433,6 +443,13 @@ let g:db_ui_execute_on_save = 0
 
 " ---
 
+Plug 'bfrg/vim-cpp-modern'
+
+let g:cpp_member_highlight = 1
+let g:cpp_simple_highlight = 1
+
+"---
+
 call plug#end()
 
 runtime macros/matchit.vim
@@ -467,8 +484,8 @@ nmap <leader>p :let @+=expand("%:p")<cr>
 nmap <leader>rp :let @+=expand("%")<cr>
 
 " == Navigation in popup menu
-" inoremap <expr> <C-j> pumvisible() ? "\<C-N>" : "j"
-" inoremap <expr> <C-k> pumvisible() ? "\<C-P>" : "k"
+inoremap <expr> <C-j> pumvisible() ? "\<C-N>" : "j"
+inoremap <expr> <C-k> pumvisible() ? "\<C-P>" : "k"
 
 " Always delete to black hole
 nnoremap d "_d
@@ -504,6 +521,8 @@ hi Normal guibg=NONE ctermbg=NONE
 
 hi Visual ctermfg=3 ctermbg=8 guibg=#82858C
 "
+
+autocmd BufRead,BufNewFile *.h,*.c set filetype=c
 
 " color dracula
 
