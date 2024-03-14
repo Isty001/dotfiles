@@ -66,7 +66,7 @@ plugins=(git debian symfony2 history)
 
 # User configuration
 
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:$HOME/.cargo/bin:$HOME/.cabal/bin:$HOME/.local/bin:/usr/local/go/bin"
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:$HOME/.cargo/bin:$HOME/.cabal/bin:$HOME/.local/bin:/usr/local/go/bin:$HOME/go/bin"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh

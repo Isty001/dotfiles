@@ -17,7 +17,8 @@ let g:ale_fixers = {
 \   'json': ['jq'],
 \   'xml': ['xmllint'],
 \   'c': ['clang-format'],
-\   'cpp': ['clang-format']
+\   'cpp': ['clang-format'],
+\   'go': ['gofmt']
 \}
 
 let g:ale_php_cs_fixer_use_global = 1
@@ -448,7 +449,11 @@ Plug 'bfrg/vim-cpp-modern'
 let g:cpp_member_highlight = 1
 let g:cpp_simple_highlight = 1
 
-"---
+" ---
+
+Plug 'joerdav/templ.vim'
+
+" ---
 
 call plug#end()
 
@@ -558,6 +563,9 @@ set hlsearch
 
 set list
 set listchars=tab:>-,trail:.,extends:>,precedes:<
+
+autocmd BufNewFile,BufRead *.go set listchars+=tab:\ \ 
+
 set backspace=indent,eol,start
 
 " == Default indent
