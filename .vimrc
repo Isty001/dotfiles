@@ -34,7 +34,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Extensions: phpls, solargraph, json, ultisnips
 
-let g:coc_global_extensions = ['coc-clangd', 'coc-db', 'coc-phpls', 'coc-ultisnips', 'coc-rls', 'coc-sumneko-lua', 'coc-solargraph', 'coc-spell-checker', 'coc-java']
+let g:coc_global_extensions = ['coc-clangd', 'coc-db', 'coc-phpls', 'coc-ultisnips', 'coc-rls', 'coc-sumneko-lua', 'coc-solargraph', 'coc-spell-checker', 'coc-java', 'coc-go']
 
 " SEE: https://github.com/neoclide/coc.nvim
 
@@ -452,6 +452,10 @@ let g:cpp_simple_highlight = 1
 " ---
 
 Plug 'joerdav/templ.vim'
+
+" ---
+
+Plug 'fatih/vim-go'
 
 " ---
 
