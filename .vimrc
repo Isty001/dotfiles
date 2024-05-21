@@ -455,7 +455,7 @@ Plug 'joerdav/templ.vim'
 
 " ---
 
-Plug 'fatih/vim-go'
+" Plug 'fatih/vim-go'
 
 " ---
 

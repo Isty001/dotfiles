@@ -2,15 +2,17 @@
 # create ~/.vim/tmp
 
 * Edit src/Make_mvc.mak, set correct `RUBY_VER` and `RUBY_VER_LONG`
-* ./configure --with-features=huge --with-ruby-command=ruby \
-                                                        --enable-multibyte \
-                                                        --enable-rubyinterp=yes \
-                                                        --enable-python3interp=yes \
-                                                        --with-python3-config-dir=$(python3-config --configdir) \
-                                                        --enable-perlinterp=yes \
-                                                        --enable-luainterp=yes \
-                                                        --enable-gui=gtk2 \
-                                                        --enable-cscope \
-                                                        --prefix=/usr/local \
-                                                        --with-x
-* sudo make install
+
+./configure --with-features=huge --with-ruby-command=ruby \
+                --enable-multibyte \
+                --enable-python3interp=yes \
+                --enable-pythoninterp=yes \
+                --with-python3-config-dir=/usr/lib/python3.10/config-3.10-x86_64-linux-gnu \
+                --with-python-config-dir=/usr/lib/python3.10/config-3.10-x86_64-linux-gnu \
+                --enable-perlinterp=yes \
+                --enable-luainterp=yes \
+                --enable-gui=gtk2 \
+                --enable-cscope \
+                --prefix=/usr/local --with-lua-prefix=/usr/loca
+
+sudo make install
