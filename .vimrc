@@ -353,6 +353,8 @@ Plug 'janko-m/vim-test'
 
 let test#strategy = "vimux"
 
+let test#go#gotest#options = '-v'
+
 nmap <silent> <C-n> :TestNearest<CR>
 nmap <silent> <C-x> :TestFile<CR>
 nmap <silent> <C-t> :TestLast<CR>
