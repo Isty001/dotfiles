@@ -34,7 +34,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Extensions: phpls, solargraph, json, ultisnips
 
-let g:coc_global_extensions = ['coc-clangd', 'coc-db', 'coc-phpls', 'coc-ultisnips', 'coc-rls', 'coc-sumneko-lua', 'coc-solargraph', 'coc-spell-checker', 'coc-java', 'coc-go']
+let g:coc_global_extensions = ['coc-clangd', 'coc-db', 'coc-phpls', 'coc-ultisnips', 'coc-rls', 'coc-sumneko-lua', 'coc-solargraph', 'coc-spell-checker', 'coc-java']
 
 " SEE: https://github.com/neoclide/coc.nvim
 
@@ -239,7 +239,7 @@ nmap <leader>G :NERDTreeFind<CR><C-w>l<CR>
 Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
 Plug 'srcery-colors/srcery-vim'
 
-" Plug 'dracula/vim', { 'as': 'dracula' }
+Plug 'dracula/vim', { 'as': 'dracula' }
 " Plug 'EdenEast/nightfox.nvim'
 
 " ---

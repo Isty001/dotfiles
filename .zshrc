@@ -160,6 +160,7 @@ alias html="lynx -stdin"
 alias python="python3"
 
 alias ag='ag --skip-vcs-ignores'
+alias php-cs-fixer="php8.3 /usr/local/bin/php-cs-fixer-8.3"
 
 autoload -U select-word-style
 select-word-style bash

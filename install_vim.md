@@ -13,6 +13,6 @@
                 --enable-luainterp=yes \
                 --enable-gui=gtk2 \
                 --enable-cscope \
-                --prefix=/usr/local --with-lua-prefix=/usr/loca
+                --prefix=/usr/local --with-lua-prefix=/usr/local
 
 sudo make install
