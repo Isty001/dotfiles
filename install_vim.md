@@ -16,3 +16,5 @@
                 --prefix=/usr/local --with-lua-prefix=/usr/local
 
 sudo make install
+
+install vim-gtk3
