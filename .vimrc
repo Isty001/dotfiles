@@ -18,7 +18,9 @@ let g:ale_fixers = {
 \   'xml': ['xmllint'],
 \   'c': ['clang-format'],
 \   'cpp': ['clang-format'],
-\   'go': ['gofmt']
+\   'go': ['gofmt'],
+\   'sql': ['sqlfluff'],
+\   'mysql': ['sqlfluff']
 \}
 
 let g:ale_php_cs_fixer_use_global = 1
@@ -34,7 +36,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Extensions: phpls, solargraph, json, ultisnips
 
-let g:coc_global_extensions = ['coc-clangd', 'coc-db', 'coc-phpls', 'coc-ultisnips', 'coc-rls', 'coc-sumneko-lua', 'coc-solargraph', 'coc-spell-checker', 'coc-java']
+let g:coc_global_extensions = ['coc-clangd', 'coc-db', '@yaegassy/coc-intelephense', 'coc-ultisnips', 'coc-rls', 'coc-sumneko-lua', 'coc-solargraph', 'coc-spell-checker', 'coc-db']
 
 " SEE: https://github.com/neoclide/coc.nvim
 
@@ -439,6 +441,7 @@ Plug 'kshenoy/vim-signature'
 
 Plug 'tpope/vim-dadbod'
 Plug 'kristijanhusak/vim-dadbod-ui'
+Plug 'kristijanhusak/vim-dadbod-completion' "Optional
 
 let g:db_ui_auto_execute_table_helpers = 0
 let g:db_ui_win_position = 'right'
